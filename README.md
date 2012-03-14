@@ -13,7 +13,7 @@ To use cfredis, place the following initialization code in the `OnRequestStart` 
 
 On a page where you wish to make a Redis connection, do so as follows:
 
-```cfs
+```cfm
 <cfset request.redis.set("your:key:name", "key value") />
 <cfset value = request.redis.get("your:key:name") />
 ```
