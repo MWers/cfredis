@@ -1,0 +1,9 @@
+cfredis TODO
+
+[ ] Investigate performance ramifications and threading concerns of creating 
+    cfredis object in request vs. application scope.
+[ ] Add MXUnit tests
+[ ] Add master/slave support (write to master, read from master or slaves)
+[ ] Add pipelining support
+[ ] Add sharded Jedis support
+
