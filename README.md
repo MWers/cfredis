@@ -4,8 +4,8 @@ cfredis is a ColdFusion wrapper for the [Jedis](https://github.com/xetorthio/jed
 
 To use cfredis, place the following initialization code in the `OnRequestStart` method in `Application.cfc`, in `OnRequestStart.cfm`, or in `Application.cfm`:
 
-    <cfset request.redis = CreateObject("component","#Application.cfcRoot#.com.surfline.db.cfredis").init() />
-    <cfset pool = application.javaloader.create("redis.clients.jedis.JedisPool") />
+    <cfset request.redis = CreateObject("component","cfredis").init() />
+    <cfset pool = CreateObject("java","redis.clients.jedis.JedisPool") />
     <cfset pool.init("redis.server.hostname.or.ip.address", redis.port) />
     <cfset request.redis.connectionPool = pool />
 
