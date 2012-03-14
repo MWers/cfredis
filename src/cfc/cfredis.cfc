@@ -2041,8 +2041,8 @@ Thanks!
 		<cfargument name="key" type="string" required="yes" />
 		<cfargument name="min" type="numeric" required="yes" />
 		<cfargument name="max" type="numeric" required="yes" />
-		<cfargument name="offset" type="numeric" required="yes" />
-		<cfargument name="count" type="numeric" required="yes" />
+		<cfargument name="offset" type="numeric" required="no" />
+		<cfargument name="count" type="numeric" required="no" />
 
 		<cfset connection = getResource() />
 		<cfif IsDefined("arguments.offset") AND IsDefined("arguments.count")>
