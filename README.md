@@ -2,7 +2,11 @@
 
 cfredis is a ColdFusion wrapper for the [Jedis](https://github.com/xetorthio/jedis/) Java client for [Redis](http://redis.io/).
 
-To use cfredis, place the following initialization code in the `OnRequestStart` method in `Application.cfc`, in `OnRequestStart.cfm`, or in `Application.cfm`:
+To use cfredis, first download Jedis and place it somewhere within your ColdFusion classpath (or better yet, use JavaLoader to include it):
+
+https://github.com/xetorthio/jedis/downloads
+
+Then place the following initialization code in the `OnRequestStart` method in `Application.cfc`, in `OnRequestStart.cfm`, or in `Application.cfm`:
 
 ```cfm
 <cfset request.redis = CreateObject("component","cfredis").init() />

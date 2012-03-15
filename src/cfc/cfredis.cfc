@@ -23,7 +23,12 @@ SOFTWARE.
 <!--- 
 cfredis is a ColdFusion wrapper for the Jedis Java client for Redis.
 
-To use cfredis, place the following initialization code in the OnRequestStart 
+To use cfredis, first download Jedis and place it somewhere within
+your ColdFusion classpath (or better yet, use JavaLoader to include it):
+
+https://github.com/xetorthio/jedis/downloads
+
+Then place the following initialization code in the OnRequestStart 
 method in Application.cfc, in OnRequestStart.cfm, or in Application.cfm:
 
 <cfset request.redis = CreateObject("component","cfredis").init() />
@@ -125,22 +130,22 @@ Thanks!
 
 		<cfset namedArgumentCount = 2 />
 
-		<cfset keysArray = ArrayNew(1)>
+		<cfset keysArray = ArrayNew(1) />
 		<cfif isArray(arguments.keys)>
-			<cfset keysArray = arguments.keys>
+			<cfset keysArray = arguments.keys />
 		<cfelseif isSimpleValue(arguments.keys)>
-			<cfset ArrayAppend(keysArray, arguments.keys)>
+			<cfset ArrayAppend(keysArray, arguments.keys) />
 
 			<!--- Treat additional non-named arguments as java-style varargs arguments --->
 			<cfif ArrayLen(arguments) GT namedArgumentCount>
 				<cfloop from="#(namedArgumentCount + 1)#" to="#ArrayLen(arguments)#" index="i">
 					<cfif isSimpleValue(arguments[i])>
-						<cfset ArrayAppend(keysArray, arguments[i])>
+						<cfset ArrayAppend(keysArray, arguments[i]) />
 					</cfif>
 				</cfloop>
 			</cfif>
 		<cfelse>
-			<cfthrow type="InvalidArgumentTypeException" message="The keys argument passed to the blpop method is not an array or one or more strings.">
+			<cfthrow type="InvalidArgumentTypeException" message="The keys argument passed to the blpop method is not an array or one or more strings." />
 		</cfif>
 
 		<cfset connection = getResource() />
@@ -162,22 +167,22 @@ Thanks!
 
 		<cfset namedArgumentCount = 2 />
 
-		<cfset keysArray = ArrayNew(1)>
+		<cfset keysArray = ArrayNew(1) />
 		<cfif isArray(arguments.keys)>
-			<cfset keysArray = arguments.keys>
+			<cfset keysArray = arguments.keys />
 		<cfelseif isSimpleValue(arguments.keys)>
-			<cfset ArrayAppend(keysArray, arguments.keys)>
+			<cfset ArrayAppend(keysArray, arguments.keys) />
 
 			<!--- Treat additional non-named arguments as java-style varargs arguments --->
 			<cfif ArrayLen(arguments) GT namedArgumentCount>
 				<cfloop from="#(namedArgumentCount + 1)#" to="#ArrayLen(arguments)#" index="i">
 					<cfif isSimpleValue(arguments[i])>
-						<cfset ArrayAppend(keysArray, arguments[i])>
+						<cfset ArrayAppend(keysArray, arguments[i]) />
 					</cfif>
 				</cfloop>
 			</cfif>
 		<cfelse>
-			<cfthrow type="InvalidArgumentTypeException" message="The keys argument passed to the brpop method is not an array or one or more strings.">
+			<cfthrow type="InvalidArgumentTypeException" message="The keys argument passed to the brpop method is not an array or one or more strings." />
 		</cfif>
 
 		<cfset connection = getResource() />
@@ -264,22 +269,22 @@ Thanks!
 
 		<cfset namedArgumentCount = 1 />
 
-		<cfset keysArray = ArrayNew(1)>
+		<cfset keysArray = ArrayNew(1) />
 		<cfif isArray(arguments.keys)>
-			<cfset keysArray = arguments.keys>
+			<cfset keysArray = arguments.keys />
 		<cfelseif isSimpleValue(arguments.keys)>
-			<cfset ArrayAppend(keysArray, arguments.keys)>
+			<cfset ArrayAppend(keysArray, arguments.keys) />
 
 			<!--- Treat additional non-named arguments as java-style varargs arguments --->
 			<cfif ArrayLen(arguments) GT namedArgumentCount>
 				<cfloop from="#(namedArgumentCount + 1)#" to="#ArrayLen(arguments)#" index="i">
 					<cfif isSimpleValue(arguments[i])>
-						<cfset ArrayAppend(keysArray, arguments[i])>
+						<cfset ArrayAppend(keysArray, arguments[i]) />
 					</cfif>
 				</cfloop>
 			</cfif>
 		<cfelse>
-			<cfthrow type="InvalidArgumentTypeException" message="The keys argument passed to the del method is not an array or one or more strings.">
+			<cfthrow type="InvalidArgumentTypeException" message="The keys argument passed to the del method is not an array or one or more strings." />
 		</cfif>
 
 		<cfset connection = getResource() />
@@ -582,22 +587,22 @@ Thanks!
 
 		<cfset namedArgumentCount = 2 />
 
-		<cfset fieldsArray = ArrayNew(1)>
+		<cfset fieldsArray = ArrayNew(1) />
 		<cfif isArray(arguments.fields)>
-			<cfset fieldsArray = arguments.fields>
+			<cfset fieldsArray = arguments.fields />
 		<cfelseif isSimpleValue(arguments.fields)>
-			<cfset ArrayAppend(fieldsArray, arguments.fields)>
+			<cfset ArrayAppend(fieldsArray, arguments.fields) />
 
 			<!--- Treat additional non-named arguments as java-style varargs arguments --->
 			<cfif ArrayLen(arguments) GT namedArgumentCount>
 				<cfloop from="#(namedArgumentCount + 1)#" to="#ArrayLen(arguments)#" index="i">
 					<cfif isSimpleValue(arguments[i])>
-						<cfset ArrayAppend(fieldsArray, arguments[i])>
+						<cfset ArrayAppend(fieldsArray, arguments[i]) />
 					</cfif>
 				</cfloop>
 			</cfif>
 		<cfelse>
-			<cfthrow type="InvalidArgumentTypeException" message="The fields argument passed to the hmget method is not an array or one or more strings.">
+			<cfthrow type="InvalidArgumentTypeException" message="The fields argument passed to the hmget method is not an array or one or more strings." />
 		</cfif>
 
 		<cfset connection = getResource() />
@@ -911,22 +916,22 @@ Thanks!
 
 		<cfset namedArgumentCount = 1 />
 
-		<cfset keysArray = ArrayNew(1)>
+		<cfset keysArray = ArrayNew(1) />
 		<cfif isArray(arguments.keys)>
-			<cfset keysArray = arguments.keys>
+			<cfset keysArray = arguments.keys />
 		<cfelseif isSimpleValue(arguments.keys)>
-			<cfset ArrayAppend(keysArray, arguments.keys)>
+			<cfset ArrayAppend(keysArray, arguments.keys) />
 
 			<!--- Treat additional non-named arguments as java-style varargs arguments --->
 			<cfif ArrayLen(arguments) GT namedArgumentCount>
 				<cfloop from="#(namedArgumentCount + 1)#" to="#ArrayLen(arguments)#" index="i">
 					<cfif isSimpleValue(arguments[i])>
-						<cfset ArrayAppend(keysArray, arguments[i])>
+						<cfset ArrayAppend(keysArray, arguments[i]) />
 					</cfif>
 				</cfloop>
 			</cfif>
 		<cfelse>
-			<cfthrow type="InvalidArgumentTypeException" message="The keys argument passed to the mget method is not an array or one or more strings.">
+			<cfthrow type="InvalidArgumentTypeException" message="The keys argument passed to the mget method is not an array or one or more strings." />
 		</cfif>
 
 		<cfset connection = getResource() />
@@ -964,22 +969,22 @@ Thanks!
 
 		<cfset namedArgumentCount = 1 />
 
-		<cfset keysvaluesArray = ArrayNew(1)>
+		<cfset keysvaluesArray = ArrayNew(1) />
 		<cfif isArray(arguments.keysvalues)>
-			<cfset keysvaluesArray = arguments.keysvalues>
+			<cfset keysvaluesArray = arguments.keysvalues />
 		<cfelseif isSimpleValue(arguments.keysvalues)>
-			<cfset ArrayAppend(keysvaluesArray, arguments.keysvalues)>
+			<cfset ArrayAppend(keysvaluesArray, arguments.keysvalues) />
 
 			<!--- Treat additional non-named arguments as java-style varargs arguments --->
 			<cfif ArrayLen(arguments) GT namedArgumentCount>
 				<cfloop from="#(namedArgumentCount + 1)#" to="#ArrayLen(arguments)#" index="i">
 					<cfif isSimpleValue(arguments[i])>
-						<cfset ArrayAppend(keysvaluesArray, arguments[i])>
+						<cfset ArrayAppend(keysvaluesArray, arguments[i]) />
 					</cfif>
 				</cfloop>
 			</cfif>
 		<cfelse>
-			<cfthrow type="InvalidArgumentTypeException" message="The keysvalues argument passed to the mset method is not an array or one or more strings.">
+			<cfthrow type="InvalidArgumentTypeException" message="The keysvalues argument passed to the mset method is not an array or one or more strings." />
 		</cfif>
 
 		<cfset connection = getResource() />
@@ -1000,22 +1005,22 @@ Thanks!
 
 		<cfset namedArgumentCount = 1 />
 
-		<cfset keysvaluesArray = ArrayNew(1)>
+		<cfset keysvaluesArray = ArrayNew(1) />
 		<cfif isArray(arguments.keysvalues)>
-			<cfset keysvaluesArray = arguments.keysvalues>
+			<cfset keysvaluesArray = arguments.keysvalues />
 		<cfelseif isSimpleValue(arguments.keysvalues)>
-			<cfset ArrayAppend(keysvaluesArray, arguments.keysvalues)>
+			<cfset ArrayAppend(keysvaluesArray, arguments.keysvalues) />
 
 			<!--- Treat additional non-named arguments as java-style varargs arguments --->
 			<cfif ArrayLen(arguments) GT namedArgumentCount>
 				<cfloop from="#(namedArgumentCount + 1)#" to="#ArrayLen(arguments)#" index="i">
 					<cfif isSimpleValue(arguments[i])>
-						<cfset ArrayAppend(keysvaluesArray, arguments[i])>
+						<cfset ArrayAppend(keysvaluesArray, arguments[i]) />
 					</cfif>
 				</cfloop>
 			</cfif>
 		<cfelse>
-			<cfthrow type="InvalidArgumentTypeException" message="The keysvalues argument passed to the msetnx method is not an array or one or more strings.">
+			<cfthrow type="InvalidArgumentTypeException" message="The keysvalues argument passed to the msetnx method is not an array or one or more strings." />
 		</cfif>
 
 		<cfset connection = getResource() />
@@ -1068,22 +1073,22 @@ Thanks!
 
 		<cfset namedArgumentCount = 2 />
 
-		<cfset patternsArray = ArrayNew(1)>
+		<cfset patternsArray = ArrayNew(1) />
 		<cfif isArray(arguments.patterns)>
-			<cfset patternsArray = arguments.patterns>
+			<cfset patternsArray = arguments.patterns />
 		<cfelseif isSimpleValue(arguments.patterns)>
-			<cfset ArrayAppend(patternsArray, arguments.patterns)>
+			<cfset ArrayAppend(patternsArray, arguments.patterns) />
 
 			<!--- Treat additional non-named arguments as java-style varargs arguments --->
 			<cfif ArrayLen(arguments) GT namedArgumentCount>
 				<cfloop from="#(namedArgumentCount + 1)#" to="#ArrayLen(arguments)#" index="i">
 					<cfif isSimpleValue(arguments[i])>
-						<cfset ArrayAppend(patternsArray, arguments[i])>
+						<cfset ArrayAppend(patternsArray, arguments[i]) />
 					</cfif>
 				</cfloop>
 			</cfif>
 		<cfelse>
-			<cfthrow type="InvalidArgumentTypeException" message="The patterns argument passed to the psubscribe method is not an array or one or more strings.">
+			<cfthrow type="InvalidArgumentTypeException" message="The patterns argument passed to the psubscribe method is not an array or one or more strings." />
 		</cfif>
 
 		<cfset connection = getResource() />
@@ -1281,22 +1286,22 @@ Thanks!
 
 		<cfset namedArgumentCount = 1 />
 
-		<cfset keysArray = ArrayNew(1)>
+		<cfset keysArray = ArrayNew(1) />
 		<cfif isArray(arguments.keys)>
-			<cfset keysArray = arguments.keys>
+			<cfset keysArray = arguments.keys />
 		<cfelseif isSimpleValue(arguments.keys)>
-			<cfset ArrayAppend(keysArray, arguments.keys)>
+			<cfset ArrayAppend(keysArray, arguments.keys) />
 
 			<!--- Treat additional non-named arguments as java-style varargs arguments --->
 			<cfif ArrayLen(arguments) GT namedArgumentCount>
 				<cfloop from="#(namedArgumentCount + 1)#" to="#ArrayLen(arguments)#" index="i">
 					<cfif isSimpleValue(arguments[i])>
-						<cfset ArrayAppend(keysArray, arguments[i])>
+						<cfset ArrayAppend(keysArray, arguments[i]) />
 					</cfif>
 				</cfloop>
 			</cfif>
 		<cfelse>
-			<cfthrow type="InvalidArgumentTypeException" message="The keys argument passed to the sdiff method is not an array or one or more strings.">
+			<cfthrow type="InvalidArgumentTypeException" message="The keys argument passed to the sdiff method is not an array or one or more strings." />
 		</cfif>
 
 		<cfset connection = getResource() />
@@ -1318,22 +1323,22 @@ Thanks!
 
 		<cfset namedArgumentCount = 2 />
 
-		<cfset keysArray = ArrayNew(1)>
+		<cfset keysArray = ArrayNew(1) />
 		<cfif isArray(arguments.keys)>
-			<cfset keysArray = arguments.keys>
+			<cfset keysArray = arguments.keys />
 		<cfelseif isSimpleValue(arguments.keys)>
-			<cfset ArrayAppend(keysArray, arguments.keys)>
+			<cfset ArrayAppend(keysArray, arguments.keys) />
 
 			<!--- Treat additional non-named arguments as java-style varargs arguments --->
 			<cfif ArrayLen(arguments) GT namedArgumentCount>
 				<cfloop from="#(namedArgumentCount + 1)#" to="#ArrayLen(arguments)#" index="i">
 					<cfif isSimpleValue(arguments[i])>
-						<cfset ArrayAppend(keysArray, arguments[i])>
+						<cfset ArrayAppend(keysArray, arguments[i]) />
 					</cfif>
 				</cfloop>
 			</cfif>
 		<cfelse>
-			<cfthrow type="InvalidArgumentTypeException" message="The keys argument passed to the sdiffstore method is not an array or one or more strings.">
+			<cfthrow type="InvalidArgumentTypeException" message="The keys argument passed to the sdiffstore method is not an array or one or more strings." />
 		</cfif>
 
 		<cfset connection = getResource() />
@@ -1458,22 +1463,22 @@ Thanks!
 
 		<cfset namedArgumentCount = 1 />
 
-		<cfset keysArray = ArrayNew(1)>
+		<cfset keysArray = ArrayNew(1) />
 		<cfif isArray(arguments.keys)>
-			<cfset keysArray = arguments.keys>
+			<cfset keysArray = arguments.keys />
 		<cfelseif isSimpleValue(arguments.keys)>
-			<cfset ArrayAppend(keysArray, arguments.keys)>
+			<cfset ArrayAppend(keysArray, arguments.keys) />
 
 			<!--- Treat additional non-named arguments as java-style varargs arguments --->
 			<cfif ArrayLen(arguments) GT namedArgumentCount>
 				<cfloop from="#(namedArgumentCount + 1)#" to="#ArrayLen(arguments)#" index="i">
 					<cfif isSimpleValue(arguments[i])>
-						<cfset ArrayAppend(keysArray, arguments[i])>
+						<cfset ArrayAppend(keysArray, arguments[i]) />
 					</cfif>
 				</cfloop>
 			</cfif>
 		<cfelse>
-			<cfthrow type="InvalidArgumentTypeException" message="The keys argument passed to the sinter method is not an array or one or more strings.">
+			<cfthrow type="InvalidArgumentTypeException" message="The keys argument passed to the sinter method is not an array or one or more strings." />
 		</cfif>
 
 		<cfset connection = getResource() />
@@ -1495,22 +1500,22 @@ Thanks!
 
 		<cfset namedArgumentCount = 2 />
 
-		<cfset keysArray = ArrayNew(1)>
+		<cfset keysArray = ArrayNew(1) />
 		<cfif isArray(arguments.keys)>
-			<cfset keysArray = arguments.keys>
+			<cfset keysArray = arguments.keys />
 		<cfelseif isSimpleValue(arguments.keys)>
-			<cfset ArrayAppend(keysArray, arguments.keys)>
+			<cfset ArrayAppend(keysArray, arguments.keys) />
 
 			<!--- Treat additional non-named arguments as java-style varargs arguments --->
 			<cfif ArrayLen(arguments) GT namedArgumentCount>
 				<cfloop from="#(namedArgumentCount + 1)#" to="#ArrayLen(arguments)#" index="i">
 					<cfif isSimpleValue(arguments[i])>
-						<cfset ArrayAppend(keysArray, arguments[i])>
+						<cfset ArrayAppend(keysArray, arguments[i]) />
 					</cfif>
 				</cfloop>
 			</cfif>
 		<cfelse>
-			<cfthrow type="InvalidArgumentTypeException" message="The keys argument passed to the sinterstore method is not an array or one or more strings.">
+			<cfthrow type="InvalidArgumentTypeException" message="The keys argument passed to the sinterstore method is not an array or one or more strings." />
 		</cfif>
 
 		<cfset connection = getResource() />
@@ -1687,22 +1692,22 @@ Thanks!
 
 		<cfset namedArgumentCount = 2 />
 
-		<cfset channelsArray = ArrayNew(1)>
+		<cfset channelsArray = ArrayNew(1) />
 		<cfif isArray(arguments.channels)>
-			<cfset channelsArray = arguments.channels>
+			<cfset channelsArray = arguments.channels />
 		<cfelseif isSimpleValue(arguments.channels)>
-			<cfset ArrayAppend(channelsArray, arguments.channels)>
+			<cfset ArrayAppend(channelsArray, arguments.channels) />
 
 			<!--- Treat additional non-named arguments as java-style varargs arguments --->
 			<cfif ArrayLen(arguments) GT namedArgumentCount>
 				<cfloop from="#(namedArgumentCount + 1)#" to="#ArrayLen(arguments)#" index="i">
 					<cfif isSimpleValue(arguments[i])>
-						<cfset ArrayAppend(channelsArray, arguments[i])>
+						<cfset ArrayAppend(channelsArray, arguments[i]) />
 					</cfif>
 				</cfloop>
 			</cfif>
 		<cfelse>
-			<cfthrow type="InvalidArgumentTypeException" message="The channels argument passed to the subscribe method is not an array or one or more strings.">
+			<cfthrow type="InvalidArgumentTypeException" message="The channels argument passed to the subscribe method is not an array or one or more strings." />
 		</cfif>
 
 		<cfset connection = getResource() />
@@ -1737,22 +1742,22 @@ Thanks!
 
 		<cfset namedArgumentCount = 1 />
 
-		<cfset keysArray = ArrayNew(1)>
+		<cfset keysArray = ArrayNew(1) />
 		<cfif isArray(arguments.keys)>
-			<cfset keysArray = arguments.keys>
+			<cfset keysArray = arguments.keys />
 		<cfelseif isSimpleValue(arguments.keys)>
-			<cfset ArrayAppend(keysArray, arguments.keys)>
+			<cfset ArrayAppend(keysArray, arguments.keys) />
 
 			<!--- Treat additional non-named arguments as java-style varargs arguments --->
 			<cfif ArrayLen(arguments) GT namedArgumentCount>
 				<cfloop from="#(namedArgumentCount + 1)#" to="#ArrayLen(arguments)#" index="i">
 					<cfif isSimpleValue(arguments[i])>
-						<cfset ArrayAppend(keysArray, arguments[i])>
+						<cfset ArrayAppend(keysArray, arguments[i]) />
 					</cfif>
 				</cfloop>
 			</cfif>
 		<cfelse>
-			<cfthrow type="InvalidArgumentTypeException" message="The keys argument passed to the sunion method is not an array or one or more strings.">
+			<cfthrow type="InvalidArgumentTypeException" message="The keys argument passed to the sunion method is not an array or one or more strings." />
 		</cfif>
 
 		<cfset connection = getResource() />
@@ -1774,22 +1779,22 @@ Thanks!
 
 		<cfset namedArgumentCount = 2 />
 
-		<cfset keysArray = ArrayNew(1)>
+		<cfset keysArray = ArrayNew(1) />
 		<cfif isArray(arguments.keys)>
-			<cfset keysArray = arguments.keys>
+			<cfset keysArray = arguments.keys />
 		<cfelseif isSimpleValue(arguments.keys)>
-			<cfset ArrayAppend(keysArray, arguments.keys)>
+			<cfset ArrayAppend(keysArray, arguments.keys) />
 
 			<!--- Treat additional non-named arguments as java-style varargs arguments --->
 			<cfif ArrayLen(arguments) GT namedArgumentCount>
 				<cfloop from="#(namedArgumentCount + 1)#" to="#ArrayLen(arguments)#" index="i">
 					<cfif isSimpleValue(arguments[i])>
-						<cfset ArrayAppend(keysArray, arguments[i])>
+						<cfset ArrayAppend(keysArray, arguments[i]) />
 					</cfif>
 				</cfloop>
 			</cfif>
 		<cfelse>
-			<cfthrow type="InvalidArgumentTypeException" message="The keys argument passed to the sunionstore method is not an array or one or more strings.">
+			<cfthrow type="InvalidArgumentTypeException" message="The keys argument passed to the sunionstore method is not an array or one or more strings." />
 		</cfif>
 
 		<cfset connection = getResource() />
@@ -1842,22 +1847,22 @@ Thanks!
 
 		<cfset namedArgumentCount = 1 />
 
-		<cfset keysArray = ArrayNew(1)>
+		<cfset keysArray = ArrayNew(1) />
 		<cfif isArray(arguments.keys)>
-			<cfset keysArray = arguments.keys>
+			<cfset keysArray = arguments.keys />
 		<cfelseif isSimpleValue(arguments.keys)>
-			<cfset ArrayAppend(keysArray, arguments.keys)>
+			<cfset ArrayAppend(keysArray, arguments.keys) />
 
 			<!--- Treat additional non-named arguments as java-style varargs arguments --->
 			<cfif ArrayLen(arguments) GT namedArgumentCount>
 				<cfloop from="#(namedArgumentCount + 1)#" to="#ArrayLen(arguments)#" index="i">
 					<cfif isSimpleValue(arguments[i])>
-						<cfset ArrayAppend(keysArray, arguments[i])>
+						<cfset ArrayAppend(keysArray, arguments[i]) />
 					</cfif>
 				</cfloop>
 			</cfif>
 		<cfelse>
-			<cfthrow type="InvalidArgumentTypeException" message="The keys argument passed to the watch method is not an array or one or more strings.">
+			<cfthrow type="InvalidArgumentTypeException" message="The keys argument passed to the watch method is not an array or one or more strings." />
 		</cfif>
 
 		<cfset connection = getResource() />
@@ -1952,22 +1957,22 @@ Thanks!
 
 		<cfset namedArgumentCount = 3 />
 
-		<cfset setsArray = ArrayNew(1)>
+		<cfset setsArray = ArrayNew(1) />
 		<cfif isArray(arguments.sets)>
-			<cfset setsArray = arguments.sets>
+			<cfset setsArray = arguments.sets />
 		<cfelseif isSimpleValue(arguments.sets)>
-			<cfset ArrayAppend(setsArray, arguments.sets)>
+			<cfset ArrayAppend(setsArray, arguments.sets) />
 
 			<!--- Treat additional non-named arguments as java-style varargs arguments --->
 			<cfif ArrayLen(arguments) GT namedArgumentCount>
 				<cfloop from="#(namedArgumentCount + 1)#" to="#ArrayLen(arguments)#" index="i">
 					<cfif isSimpleValue(arguments[i])>
-						<cfset ArrayAppend(setsArray, arguments[i])>
+						<cfset ArrayAppend(setsArray, arguments[i]) />
 					</cfif>
 				</cfloop>
 			</cfif>
 		<cfelse>
-			<cfthrow type="InvalidArgumentTypeException" message="The sets argument passed to the zinterstore method is not an array or one or more strings.">
+			<cfthrow type="InvalidArgumentTypeException" message="The sets argument passed to the zinterstore method is not an array or one or more strings." />
 		</cfif>
 
 		<cfset connection = getResource() />
@@ -2284,22 +2289,22 @@ Thanks!
 
 		<cfset namedArgumentCount = 3 />
 
-		<cfset setsArray = ArrayNew(1)>
+		<cfset setsArray = ArrayNew(1) />
 		<cfif isArray(arguments.sets)>
-			<cfset setsArray = arguments.sets>
+			<cfset setsArray = arguments.sets />
 		<cfelseif isSimpleValue(arguments.sets)>
-			<cfset ArrayAppend(setsArray, arguments.sets)>
+			<cfset ArrayAppend(setsArray, arguments.sets) />
 
 			<!--- Treat additional non-named arguments as java-style varargs arguments --->
 			<cfif ArrayLen(arguments) GT namedArgumentCount>
 				<cfloop from="#(namedArgumentCount + 1)#" to="#ArrayLen(arguments)#" index="i">
 					<cfif isSimpleValue(arguments[i])>
-						<cfset ArrayAppend(setsArray, arguments[i])>
+						<cfset ArrayAppend(setsArray, arguments[i]) />
 					</cfif>
 				</cfloop>
 			</cfif>
 		<cfelse>
-			<cfthrow type="InvalidArgumentTypeException" message="The sets argument passed to the zunionstore method is not an array or one or more strings.">
+			<cfthrow type="InvalidArgumentTypeException" message="The sets argument passed to the zunionstore method is not an array or one or more strings." />
 		</cfif>
 
 		<cfset connection = getResource() />
