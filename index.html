@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="cfredis : A Redis client for ColdFusion" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>cfredis</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/MWers/cfredis">Fork Me on GitHub</a>
+
+          <h1 id="project_title">cfredis</h1>
+          <h2 id="project_tagline">A Redis client for ColdFusion</h2>
+
+          <section id="downloads">
+            <a class="zip_download_link" href="https://github.com/MWers/cfredis/zipball/master">Download this project as a .zip file</a>
+            <a class="tar_download_link" href="https://github.com/MWers/cfredis/tarball/master">Download this project as a tar.gz file</a>
+          </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>cfredis</h1>
+
+<p>cfredis is a ColdFusion wrapper for the <a href="https://github.com/xetorthio/jedis/">Jedis</a> Java client for <a href="http://redis.io/">Redis</a>.</p>
+
+<p>To use cfredis, first download Jedis and place it somewhere within your ColdFusion classpath (or better yet, use JavaLoader to include it):</p>
+
+<p><a href="https://github.com/xetorthio/jedis/downloads">https://github.com/xetorthio/jedis/downloads</a></p>
+
+<p>Then place the following initialization code in the <code>OnRequestStart</code> method in <code>Application.cfc</code>, in <code>OnRequestStart.cfm</code>, or in <code>Application.cfm</code>:</p>
+
+<div class="highlight">
+<pre><span class="nb">&lt;cfset</span> <span class="nv">request.redis</span> <span class="o">=</span> <span class="nf">CreateObject</span><span class="p">(</span><span class="s2">"component"</span><span class="p">,</span><span class="s2">"cfredis"</span><span class="p">).</span><span class="nf">init</span><span class="p">()</span> <span class="o">/</span><span class="nb">&gt;</span>
+<span class="nb">&lt;cfset</span> <span class="nv">pool</span> <span class="o">=</span> <span class="nf">CreateObject</span><span class="p">(</span><span class="s2">"java"</span><span class="p">,</span><span class="s2">"redis.clients.jedis.JedisPool"</span><span class="p">)</span> <span class="o">/</span><span class="nb">&gt;</span>
+<span class="nb">&lt;cfset</span> <span class="nf">pool.init</span><span class="p">(</span><span class="s2">"redis.server.hostname.or.ip.address"</span><span class="p">,</span> <span class="nv">redis.port</span><span class="p">)</span> <span class="o">/</span><span class="nb">&gt;</span>
+<span class="nb">&lt;cfset</span> <span class="nv">request.redis.connectionPool</span> <span class="o">=</span> <span class="nv">pool</span> <span class="o">/</span><span class="nb">&gt;</span>
+</pre>
+</div>
+
+
+<p>On a page where you wish to make a Redis connection, do so as follows:</p>
+
+<div class="highlight">
+<pre><span class="nb">&lt;cfset</span> <span class="nf">request.redis.set</span><span class="p">(</span><span class="s2">"your:key:name"</span><span class="p">,</span> <span class="s2">"key value"</span><span class="p">)</span> <span class="o">/</span><span class="nb">&gt;</span>
+<span class="nb">&lt;cfset</span> <span class="nv">value</span> <span class="o">=</span> <span class="nf">request.redis.get</span><span class="p">(</span><span class="s2">"your:key:name"</span><span class="p">)</span> <span class="o">/</span><span class="nb">&gt;</span>
+</pre>
+</div>
+
+
+<p>cfredis implements all of the Redis methods implemented in redis.clients.jedis.Jedis with the following changes:</p>
+
+<ul>
+<li><p><code>ltrim</code> has been renamed to <code>_ltrim</code> to avoid conflicts with the built-in CF function <code>LTrim()</code></p></li>
+<li>
+<p>The following overloaded Jedis methods have been combined to singular CF methods:</p>
+
+<ul>
+<li><code>sort</code></li>
+<li><code>zinterstore</code></li>
+<li><code>zrangeByScore</code></li>
+<li><code>zrangeByScoreWithScores</code></li>
+<li><code>zrevrangeByScore</code></li>
+<li><code>zrevrangeByScoreWithScores</code></li>
+<li><code>zunionstore</code></li>
+</ul>
+</li>
+</ul><p>If you have any problems with cfredis, please submit an issue:</p>
+
+<p><a href="https://github.com/MWers/cfredis/issues">https://github.com/MWers/cfredis/issues</a></p>
+
+<p>If you'd like to help to make cfredis better, please fork this project and submit a pull request. A great place to start would be in creating MXUnit tests. They can be based on the Jedis JUnit tests here:</p>
+
+<p><a href="https://github.com/xetorthio/jedis/tree/master/src/test/java/redis/clients/jedis/tests">https://github.com/xetorthio/jedis/tree/master/src/test/java/redis/clients/jedis/tests</a></p>
+
+<p>Thanks!</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">cfredis maintained by <a href="https://github.com/MWers">MWers</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
