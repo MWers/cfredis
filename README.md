@@ -6,6 +6,8 @@ To use cfredis, first download Jedis and place it somewhere within your ColdFusi
 
 https://github.com/xetorthio/jedis/downloads
 
+(Note: Jedis depends on [Apache Commons Pool](http://commons.apache.org/proper/commons-pool/download_pool.cgi) which should also be downloaded and added to your ColdFusion classpath or included via JavaLoader.)
+
 Then place the following initialization code in the `OnRequestStart` method in `Application.cfc`, in `OnRequestStart.cfm`, or in `Application.cfm`:
 
 ```cfm
@@ -34,6 +36,8 @@ cfredis implements all of the Redis methods implemented in redis.clients.jedis.J
     * `zrevrangeByScore`
     * `zrevrangeByScoreWithScores`
     * `zunionstore`
+
+* Transactions and Pipelining are not yet supported.
 
 If you have any problems with cfredis, please submit an issue:
 
