@@ -1,4 +1,4 @@
-<!--- 
+<!---
 Copyright (c) 2011-2012 Matthew Walker
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,7 +20,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  --->
 
-<!--- 
+<!---
 cfredis is a ColdFusion wrapper for the Jedis Java client for Redis.
 
 To use cfredis, first download Jedis and place it somewhere within
@@ -28,7 +28,7 @@ your ColdFusion classpath (or better yet, use JavaLoader to include it):
 
 https://github.com/xetorthio/jedis/downloads
 
-Then place the following initialization code in the OnRequestStart 
+Then place the following initialization code in the OnRequestStart
 method in Application.cfc, in OnRequestStart.cfm, or in Application.cfm:
 
 <cfset request.redis = CreateObject("component","cfredis").init() />
@@ -44,7 +44,7 @@ On the page where you wish to make a Redis connection, do so as follows:
 cfredis implements all of the Redis methods implemented in redis.clients.jedis.Jedis
 with the following changes:
 
-- ltrim has been renamed to _ltrim to avoid conflicts with the built-in CF 
+- ltrim has been renamed to _ltrim to avoid conflicts with the built-in CF
   function LTrim()
 
 - The following overloaded Jedis methods have been combined to singular CF methods:
@@ -60,7 +60,7 @@ If you have any problems with cfredis, please submit an issue:
 
 https://github.com/MWers/cfredis/issues
 
-If you'd like to help to make cfredis better, please fork this project and 
+If you'd like to help to make cfredis better, please fork this project and
 submit a pull request. A great place to start would be in creating MXUnit
 tests. They can be based on the Jedis JUnit tests here:
 
@@ -84,7 +84,7 @@ Thanks!
 	<cffunction name="returnResource" access="private" returntype="Any" output="no">
 		<cfargument name="connection" required="yes">
 
-		<cfset this.connectionPool.returnResource(connection)>
+		<cfset this.connectionPool.returnResource(arguments.connection)>
 
 		<cfreturn>
 	</cffunction>
@@ -94,6 +94,9 @@ Thanks!
 	<cffunction name="append" access="public" returntype="numeric" output="no">
 		<cfargument name="key" type="string" required="yes" />
 		<cfargument name="value" type="string" required="yes" />
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
 
 		<cfset connection = getResource() />
 		<cfset result = connection.append(JavaCast("string", arguments.key), JavaCast("string", arguments.value)) />
@@ -111,6 +114,9 @@ Thanks!
 	<cffunction name="auth" access="public" returntype="string" output="no">
 		<cfargument name="password" type="string" required="yes" />
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+
 		<cfset connection = getResource() />
 		<cfset result = connection.auth(JavaCast("string", arguments.password)) />
 		<cfset returnResource(connection) />
@@ -123,10 +129,22 @@ Thanks!
 	</cffunction>
 
 
+	<!--- FIXME: Add the following new functions --->
+	<!--- BITCOUNT - Long bitcount(final String key) --->
+	<!--- BITCOUNT - Long bitcount(final String key, long start, long end) --->
+	<!--- BITOP - Long bitop(BitOP op, final String destKey, String... srcKeys) --->
+
+
 	<!--- BLPOP - List<String> blpop(int timeout, String... keys) --->
 	<cffunction name="blpop" access="public" returntype="array" output="no">
 		<cfargument name="timeout" type="numeric" required="yes" />
 		<cfargument name="keys" type="any" required="yes" />
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
+		<cfset var namedArgumentCount = '' />
+		<cfset var keysArray = '' />
+		<cfset var i = '' />
 
 		<cfset namedArgumentCount = 2 />
 
@@ -164,6 +182,12 @@ Thanks!
 	<cffunction name="brpop" access="public" returntype="array" output="no">
 		<cfargument name="timeout" type="numeric" required="yes" />
 		<cfargument name="keys" type="any" required="yes" />
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
+		<cfset var namedArgumentCount = '' />
+		<cfset var keysArray = '' />
+		<cfset var i = '' />
 
 		<cfset namedArgumentCount = 2 />
 
@@ -203,6 +227,9 @@ Thanks!
 		<cfargument name="destination" type="string" required="yes" />
 		<cfargument name="timeout" type="numeric" required="yes" />
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+
 		<cfset connection = getResource() />
 		<cfset result = connection.brpoplpush(JavaCast("string", arguments.source), JavaCast("string", arguments.destination), JavaCast("int", arguments.timeout)) />
 		<cfset returnResource(connection) />
@@ -217,6 +244,9 @@ Thanks!
 
 	<!--- DBSIZE - Long dbSize() --->
 	<cffunction name="dbSize" access="public" returntype="numeric" output="no">
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
 
 		<cfset connection = getResource() />
 		<cfset result = connection.dbSize() />
@@ -233,6 +263,9 @@ Thanks!
 	<!--- DECR - Long decr(String key) --->
 	<cffunction name="decr" access="public" returntype="numeric" output="no">
 		<cfargument name="key" type="string" required="yes" />
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
 
 		<cfset connection = getResource() />
 		<cfset result = connection.decr(JavaCast("string", arguments.key)) />
@@ -251,6 +284,9 @@ Thanks!
 		<cfargument name="key" type="string" required="yes" />
 		<cfargument name="integer" type="numeric" required="yes" />
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+
 		<cfset connection = getResource() />
 		<cfset result = connection.decrBy(JavaCast("string", arguments.key), JavaCast("long", arguments.integer)) />
 		<cfset returnResource(connection) />
@@ -267,11 +303,22 @@ Thanks!
 	<cffunction name="del" access="public" returntype="numeric" output="no">
 		<cfargument name="keys" type="any" required="yes" />
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+		<cfset var namedArgumentCount = '' />
+		<cfset var keysArray = '' />
+		<cfset var key = '' />
+		<cfset var i = '' />
+
 		<cfset namedArgumentCount = 1 />
 
 		<cfset keysArray = ArrayNew(1) />
 		<cfif isArray(arguments.keys)>
-			<cfset keysArray = arguments.keys />
+			<!--- Iterate over array copying it to a new array. This prevents the error that we get
+				  when using the result of a Redis call as the argument to another. --->
+			<cfloop array="#arguments.keys#" index="key">
+				<cfset ArrayAppend(keysArray, key) />
+			</cfloop>
 		<cfelseif isSimpleValue(arguments.keys)>
 			<cfset ArrayAppend(keysArray, arguments.keys) />
 
@@ -303,6 +350,9 @@ Thanks!
 	<cffunction name="echo" access="public" returntype="string" output="no">
 		<cfargument name="string" type="string" required="yes" />
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+
 		<cfset connection = getResource() />
 		<cfset result = connection.echo(JavaCast("string", arguments.string)) />
 		<cfset returnResource(connection) />
@@ -315,9 +365,68 @@ Thanks!
 	</cffunction>
 
 
+	<!--- EVAL - Object eval(String script) --->
+	<!--- EVAL - Object eval(String script, List<String> keys, List<String> args) --->
+	<!--- It should be used as eval(script) or eval(script, keys, args) --->
+	<cffunction name="eval" access="public" returntype="any" output="no">
+		<cfargument name="script" type="string" required="yes" />
+		<cfargument name="keys" type="array" required="no" default="#ArrayNew(1)#" />
+		<cfargument name="args" type="array" required="no" default="#ArrayNew(1)#" />
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
+
+		<cfset connection = getResource() />
+		<cfset result = connection.eval(JavaCast("string", arguments.script), arguments.keys, arguments.args) />
+		<cfset returnResource(connection) />
+
+		<cfif isDefined("result")>
+			<cfreturn result />
+		<cfelse>
+			<cfreturn '' />
+		</cfif>
+	</cffunction>
+
+
+	<!--- TODO: Create function to eval with keyCount and params args --->
+	<!--- EVAL - Object eval(String script, int keyCount, String... params) --->
+	<!--- It should be used as eval(script, keyCount, params) --->
+
+
+	<!--- EVALSHA - Object evalsha(String sha1) --->
+	<!--- EVALSHA - Object evalsha(String sha1, List<String> keys, List<String> args) --->
+	<!--- It should be used as evalsha(script) or evalsha(script, keys, args) --->
+	<cffunction name="evalsha" access="public" returntype="any" output="no">
+		<cfargument name="sha1" type="string" required="yes" />
+		<cfargument name="keys" type="array" required="no" default="#ArrayNew(1)#" />
+		<cfargument name="args" type="array" required="no" default="#ArrayNew(1)#" />
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
+
+		<cfset connection = getResource() />
+		<cfset result = connection.evalsha(JavaCast("string", arguments.sha1), arguments.keys, arguments.args) />
+		<cfset returnResource(connection) />
+
+		<cfif isDefined("result")>
+			<cfreturn result />
+		<cfelse>
+			<cfreturn '' />
+		</cfif>
+	</cffunction>
+
+
+	<!--- TODO: Create function to evalsha with keyCount and params args --->
+	<!--- EVALSHA - Object evalsha(String script, int keyCount, String... params) --->
+	<!--- It should be used as evalsha(script, keyCount, params) --->
+
+
 	<!--- EXISTS - Boolean exists(String key) --->
 	<cffunction name="exists" access="public" returntype="boolean" output="no">
 		<cfargument name="key" type="string" required="yes" />
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
 
 		<cfset connection = getResource() />
 		<cfset result = connection.exists(JavaCast("string", arguments.key)) />
@@ -336,6 +445,9 @@ Thanks!
 		<cfargument name="key" type="string" required="yes" />
 		<cfargument name="seconds" type="numeric" required="yes" />
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+
 		<cfset connection = getResource() />
 		<cfset result = connection.expire(JavaCast("string", arguments.key), JavaCast("int", arguments.seconds)) />
 		<cfset returnResource(connection) />
@@ -353,6 +465,9 @@ Thanks!
 		<cfargument name="key" type="string" required="yes" />
 		<cfargument name="unixTime" type="numeric" required="yes" />
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+
 		<cfset connection = getResource() />
 		<cfset result = connection.expireAt(JavaCast("string", arguments.key), JavaCast("long", arguments.unixTime)) />
 		<cfset returnResource(connection) />
@@ -367,6 +482,9 @@ Thanks!
 
 	<!--- FLUSHALL - String flushAll() --->
 	<cffunction name="flushAll" access="public" returntype="string" output="no">
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
 
 		<cfset connection = getResource() />
 		<cfset result = connection.flushAll() />
@@ -383,6 +501,9 @@ Thanks!
 	<!--- FLUSHDB - String flushDB() --->
 	<cffunction name="flushDB" access="public" returntype="string" output="no">
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+
 		<cfset connection = getResource() />
 		<cfset result = connection.flushDB() />
 		<cfset returnResource(connection) />
@@ -398,6 +519,9 @@ Thanks!
 	<!--- GET - String get(String key) --->
 	<cffunction name="get" access="public" returntype="string" output="no">
 		<cfargument name="key" type="string" required="yes" />
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
 
 		<cfset connection = getResource() />
 		<cfset result = connection.get(JavaCast("string", arguments.key)) />
@@ -416,6 +540,9 @@ Thanks!
 		<cfargument name="key" type="string" required="yes" />
 		<cfargument name="value" type="string" required="yes" />
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+
 		<cfset connection = getResource() />
 		<cfset result = connection.getSet(JavaCast("string", arguments.key), JavaCast("string", arguments.value)) />
 		<cfset returnResource(connection) />
@@ -432,6 +559,9 @@ Thanks!
 	<cffunction name="getbit" access="public" returntype="boolean" output="no">
 		<cfargument name="key" type="string" required="yes" />
 		<cfargument name="offset" type="numeric" required="yes" />
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
 
 		<cfset connection = getResource() />
 		<cfset result = connection.getbit(JavaCast("string", arguments.key), JavaCast("long", arguments.offset)) />
@@ -451,6 +581,9 @@ Thanks!
 		<cfargument name="startOffset" type="numeric" required="yes" />
 		<cfargument name="endOffset" type="numeric" required="yes" />
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+
 		<cfset connection = getResource() />
 		<cfset result = connection.getrange(JavaCast("string", arguments.key), JavaCast("long", arguments.startOffset), JavaCast("long", arguments.endOffset)) />
 		<cfset returnResource(connection) />
@@ -463,13 +596,44 @@ Thanks!
 	</cffunction>
 
 
-	<!--- HDEL - Long hdel(String key, String field) --->
+	<!--- HDEL - Long hdel(final String key, final String... fields) --->
 	<cffunction name="hdel" access="public" returntype="numeric" output="no">
 		<cfargument name="key" type="string" required="yes" />
-		<cfargument name="field" type="string" required="yes" />
+		<cfargument name="fields" type="any" required="yes" />
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
+		<cfset var namedArgumentCount = '' />
+		<cfset var fieldsArray = '' />
+		<cfset var field = '' />
+		<cfset var i = '' />
+
+		<cfset namedArgumentCount = 2 />
+
+		<cfset fieldsArray = ArrayNew(1) />
+		<cfif isArray(arguments.fields)>
+			<!--- Iterate over array copying it to a new array. This prevents the error that we get
+				  when using the result of a Redis call as the argument to another. --->
+			<cfloop array="#arguments.fields#" index="field">
+				<cfset ArrayAppend(fieldsArray, field) />
+			</cfloop>
+		<cfelseif isSimpleValue(arguments.fields)>
+			<cfset ArrayAppend(fieldsArray, arguments.fields) />
+
+			<!--- Treat additional non-named arguments as java-style varargs arguments --->
+			<cfif ArrayLen(arguments) GT namedArgumentCount>
+				<cfloop from="#(namedArgumentCount + 1)#" to="#ArrayLen(arguments)#" index="i">
+					<cfif isSimpleValue(arguments[i])>
+						<cfset ArrayAppend(fieldsArray, arguments[i]) />
+					</cfif>
+				</cfloop>
+			</cfif>
+		<cfelse>
+			<cfthrow type="InvalidArgumentTypeException" message="The fields argument passed to the hdel method is not an array or one or more strings." />
+		</cfif>
 
 		<cfset connection = getResource() />
-		<cfset result = connection.hdel(JavaCast("string", arguments.key), JavaCast("string", arguments.field)) />
+		<cfset result = connection.hdel(JavaCast("string", arguments.key), JavaCast("string[]", fieldsArray)) />
 		<cfset returnResource(connection) />
 
 		<cfif isDefined("result")>
@@ -484,6 +648,9 @@ Thanks!
 	<cffunction name="hexists" access="public" returntype="boolean" output="no">
 		<cfargument name="key" type="string" required="yes" />
 		<cfargument name="field" type="string" required="yes" />
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
 
 		<cfset connection = getResource() />
 		<cfset result = connection.hexists(JavaCast("string", arguments.key), JavaCast("string", arguments.field)) />
@@ -502,6 +669,9 @@ Thanks!
 		<cfargument name="key" type="string" required="yes" />
 		<cfargument name="field" type="string" required="yes" />
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+
 		<cfset connection = getResource() />
 		<cfset result = connection.hget(JavaCast("string", arguments.key), JavaCast("string", arguments.field)) />
 		<cfset returnResource(connection) />
@@ -517,6 +687,9 @@ Thanks!
 	<!--- HGETALL - Map<String,String> hgetAll(String key) --->
 	<cffunction name="hgetAll" access="public" returntype="struct" output="no">
 		<cfargument name="key" type="string" required="yes" />
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
 
 		<cfset connection = getResource() />
 		<cfset result = connection.hgetAll(JavaCast("string", arguments.key)) />
@@ -536,6 +709,9 @@ Thanks!
 		<cfargument name="field" type="string" required="yes" />
 		<cfargument name="value" type="numeric" required="yes" />
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+
 		<cfset connection = getResource() />
 		<cfset result = connection.hincrBy(JavaCast("string", arguments.key), JavaCast("string", arguments.field), JavaCast("long", arguments.value)) />
 		<cfset returnResource(connection) />
@@ -551,6 +727,9 @@ Thanks!
 	<!--- HKEYS - Set<String> hkeys(String key) --->
 	<cffunction name="hkeys" access="public" returntype="array" output="no">
 		<cfargument name="key" type="string" required="yes" />
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
 
 		<cfset connection = getResource() />
 		<cfset result = connection.hkeys(JavaCast("string", arguments.key)) />
@@ -568,6 +747,9 @@ Thanks!
 	<cffunction name="hlen" access="public" returntype="numeric" output="no">
 		<cfargument name="key" type="string" required="yes" />
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+
 		<cfset connection = getResource() />
 		<cfset result = connection.hlen(JavaCast("string", arguments.key)) />
 		<cfset returnResource(connection) />
@@ -584,6 +766,12 @@ Thanks!
 	<cffunction name="hmget" access="public" returntype="array" output="no">
 		<cfargument name="key" type="string" required="yes" />
 		<cfargument name="fields" type="any" required="yes" />
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
+		<cfset var namedArgumentCount = '' />
+		<cfset var fieldsArray = '' />
+		<cfset var i = '' />
 
 		<cfset namedArgumentCount = 2 />
 
@@ -622,6 +810,9 @@ Thanks!
 		<cfargument name="key" type="string" required="yes" />
 		<cfargument name="hash" type="struct" required="yes" />
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+
 		<cfset connection = getResource() />
 		<cfset result = connection.hmset(JavaCast("string", arguments.key), arguments.hash) />
 		<cfset returnResource(connection) />
@@ -639,6 +830,9 @@ Thanks!
 		<cfargument name="key" type="string" required="yes" />
 		<cfargument name="field" type="string" required="yes" />
 		<cfargument name="value" type="string" required="yes" />
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
 
 		<cfset connection = getResource() />
 		<cfset result = connection.hset(JavaCast("string", arguments.key), JavaCast("string", arguments.field), JavaCast("string", arguments.value)) />
@@ -658,6 +852,9 @@ Thanks!
 		<cfargument name="field" type="string" required="yes" />
 		<cfargument name="value" type="string" required="yes" />
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+
 		<cfset connection = getResource() />
 		<cfset result = connection.hsetnx(JavaCast("string", arguments.key), JavaCast("string", arguments.field), JavaCast("string", arguments.value)) />
 		<cfset returnResource(connection) />
@@ -674,6 +871,9 @@ Thanks!
 	<cffunction name="hvals" access="public" returntype="array" output="no">
 		<cfargument name="key" type="string" required="yes" />
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+
 		<cfset connection = getResource() />
 		<cfset result = connection.hvals(JavaCast("string", arguments.key)) />
 		<cfset returnResource(connection) />
@@ -689,6 +889,9 @@ Thanks!
 	<!--- INCR - Long incr(String key) --->
 	<cffunction name="incr" access="public" returntype="numeric" output="no">
 		<cfargument name="key" type="string" required="yes" />
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
 
 		<cfset connection = getResource() />
 		<cfset result = connection.incr(JavaCast("string", arguments.key)) />
@@ -707,6 +910,9 @@ Thanks!
 		<cfargument name="key" type="string" required="yes" />
 		<cfargument name="integer" type="numeric" required="yes" />
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+
 		<cfset connection = getResource() />
 		<cfset result = connection.incrBy(JavaCast("string", arguments.key), JavaCast("long", arguments.integer)) />
 		<cfset returnResource(connection) />
@@ -722,6 +928,9 @@ Thanks!
 	<!--- KEYS - Set<String> keys(String pattern) --->
 	<cffunction name="keys" access="public" returntype="array" output="no">
 		<cfargument name="pattern" type="string" required="yes" />
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
 
 		<cfset connection = getResource() />
 		<cfset result = connection.keys(JavaCast("string", arguments.pattern)) />
@@ -739,6 +948,9 @@ Thanks!
 	<cffunction name="lindex" access="public" returntype="string" output="no">
 		<cfargument name="key" type="string" required="yes" />
 		<cfargument name="index" type="numeric" required="yes" />
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
 
 		<cfset connection = getResource() />
 		<cfset result = connection.lindex(JavaCast("string", arguments.key), JavaCast("long", arguments.index)) />
@@ -759,6 +971,9 @@ Thanks!
 		<cfargument name="pivot" type="string" required="yes" />
 		<cfargument name="value" type="string" required="yes" />
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+
 		<cfset connection = getResource() />
 		<cfset result = connection.linsert(JavaCast("string", arguments.key), arguments.where, JavaCast("string", arguments.pivot), JavaCast("string", arguments.value)) />
 		<cfset returnResource(connection) />
@@ -774,6 +989,9 @@ Thanks!
 	<!--- LLEN - Long llen(String key) --->
 	<cffunction name="llen" access="public" returntype="numeric" output="no">
 		<cfargument name="key" type="string" required="yes" />
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
 
 		<cfset connection = getResource() />
 		<cfset result = connection.llen(JavaCast("string", arguments.key)) />
@@ -791,6 +1009,9 @@ Thanks!
 	<cffunction name="lpop" access="public" returntype="string" output="no">
 		<cfargument name="key" type="string" required="yes" />
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+
 		<cfset connection = getResource() />
 		<cfset result = connection.lpop(JavaCast("string", arguments.key)) />
 		<cfset returnResource(connection) />
@@ -803,10 +1024,14 @@ Thanks!
 	</cffunction>
 
 
+	<!--- FIXME: Change to use format Long lpush(final String key, final String... strings) --->
 	<!--- LPUSH - Long lpush(String key, String string) --->
 	<cffunction name="lpush" access="public" returntype="numeric" output="no">
 		<cfargument name="key" type="string" required="yes" />
 		<cfargument name="string" type="string" required="yes" />
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
 
 		<cfset connection = getResource() />
 		<cfset result = connection.lpush(JavaCast("string", arguments.key), JavaCast("string", arguments.string)) />
@@ -820,10 +1045,14 @@ Thanks!
 	</cffunction>
 
 
+	<!--- FIXME: Change to use format Long lpushx(final String key, final String... string) --->
 	<!--- LPUSHX - Long lpushx(String key, String string) --->
 	<cffunction name="lpushx" access="public" returntype="numeric" output="no">
 		<cfargument name="key" type="string" required="yes" />
 		<cfargument name="string" type="string" required="yes" />
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
 
 		<cfset connection = getResource() />
 		<cfset result = connection.lpushx(JavaCast("string", arguments.key), JavaCast("string", arguments.string)) />
@@ -843,6 +1072,9 @@ Thanks!
 		<cfargument name="start" type="numeric" required="yes" />
 		<cfargument name="end" type="numeric" required="yes" />
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+
 		<cfset connection = getResource() />
 		<cfset result = connection.lrange(JavaCast("string", arguments.key), JavaCast("long", arguments.start), JavaCast("long", arguments.end)) />
 		<cfset returnResource(connection) />
@@ -861,6 +1093,9 @@ Thanks!
 		<cfargument name="count" type="numeric" required="yes" />
 		<cfargument name="value" type="string" required="yes" />
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+
 		<cfset connection = getResource() />
 		<cfset result = connection.lrem(JavaCast("string", arguments.key), JavaCast("long", arguments.count), JavaCast("string", arguments.value)) />
 		<cfset returnResource(connection) />
@@ -878,6 +1113,9 @@ Thanks!
 		<cfargument name="key" type="string" required="yes" />
 		<cfargument name="index" type="numeric" required="yes" />
 		<cfargument name="value" type="string" required="yes" />
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
 
 		<cfset connection = getResource() />
 		<cfset result = connection.lset(JavaCast("string", arguments.key), JavaCast("long", arguments.index), JavaCast("string", arguments.value)) />
@@ -898,6 +1136,9 @@ Thanks!
 		<cfargument name="start" type="numeric" required="yes" />
 		<cfargument name="end" type="numeric" required="yes" />
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+
 		<cfset connection = getResource() />
 		<cfset result = connection.ltrim(JavaCast("string", arguments.key), JavaCast("long", arguments.start), JavaCast("long", arguments.end)) />
 		<cfset returnResource(connection) />
@@ -913,6 +1154,12 @@ Thanks!
 	<!--- MGET - List<String> mget(String... keys) --->
 	<cffunction name="mget" access="public" returntype="array" output="no">
 		<cfargument name="keys" type="any" required="yes" />
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
+		<cfset var namedArgumentCount = '' />
+		<cfset var keysArray = '' />
+		<cfset var i = '' />
 
 		<cfset namedArgumentCount = 1 />
 
@@ -951,6 +1198,9 @@ Thanks!
 		<cfargument name="key" type="string" required="yes" />
 		<cfargument name="dbIndex" type="numeric" required="yes" />
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+
 		<cfset connection = getResource() />
 		<cfset result = connection.move(JavaCast("string", arguments.key), JavaCast("int", arguments.dbIndex)) />
 		<cfset returnResource(connection) />
@@ -966,6 +1216,12 @@ Thanks!
 	<!--- MSET - String mset(String... keysvalues) --->
 	<cffunction name="mset" access="public" returntype="string" output="no">
 		<cfargument name="keysvalues" type="any" required="yes" />
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
+		<cfset var namedArgumentCount = '' />
+		<cfset var keysvaluesArray = '' />
+		<cfset var i = '' />
 
 		<cfset namedArgumentCount = 1 />
 
@@ -1003,6 +1259,12 @@ Thanks!
 	<cffunction name="msetnx" access="public" returntype="numeric" output="no">
 		<cfargument name="keysvalues" type="any" required="yes" />
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+		<cfset var namedArgumentCount = '' />
+		<cfset var keysvaluesArray = '' />
+		<cfset var i = '' />
+
 		<cfset namedArgumentCount = 1 />
 
 		<cfset keysvaluesArray = ArrayNew(1) />
@@ -1035,9 +1297,23 @@ Thanks!
 	</cffunction>
 
 
+	<!--- MULTI - Transaction multi() --->
+	<cffunction name="multi" access="public" returntype="Any" output="no">
+		<cfset var trans = '' />
+
+		<cfset trans = CreateObject("component","cfredis_transaction").init() />
+		<cfset trans.transaction = getResource().multi() />
+
+		<cfreturn trans />
+	</cffunction>
+
+
 	<!--- PERSIST - Long persist(String key) --->
 	<cffunction name="persist" access="public" returntype="numeric" output="no">
 		<cfargument name="key" type="string" required="yes" />
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
 
 		<cfset connection = getResource() />
 		<cfset result = connection.persist(JavaCast("string", arguments.key)) />
@@ -1054,6 +1330,9 @@ Thanks!
 	<!--- PING - String ping() --->
 	<cffunction name="ping" access="public" returntype="string" output="no">
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+
 		<cfset connection = getResource() />
 		<cfset result = connection.ping() />
 		<cfset returnResource(connection) />
@@ -1066,10 +1345,27 @@ Thanks!
 	</cffunction>
 
 
+	<!--- PIPELINED - Pipeline pipelined() --->
+	<cffunction name="pipelined" access="public" returntype="Any" output="no">
+		<cfset var pipe = '' />
+
+		<cfset pipe = CreateObject("component","cfredis_pipeline").init() />
+		<cfset pipe.pipeline = getResource().pipelined() />
+
+		<cfreturn pipe />
+	</cffunction>
+
+
 	<!--- PSUBSCRIBE - void psubscribe(JedisPubSub jedisPubSub, String... patterns) --->
 	<cffunction name="psubscribe" access="public" returntype="void" output="no">
 		<cfargument name="jedisPubSub" type="any" required="yes" />
 		<cfargument name="patterns" type="any" required="yes" />
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
+		<cfset var namedArgumentCount = '' />
+		<cfset var patternsArray = '' />
+		<cfset var i = '' />
 
 		<cfset namedArgumentCount = 2 />
 
@@ -1104,6 +1400,9 @@ Thanks!
 		<cfargument name="channel" type="string" required="yes" />
 		<cfargument name="message" type="string" required="yes" />
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+
 		<cfset connection = getResource() />
 		<cfset result = connection.publish(JavaCast("string", arguments.channel), JavaCast("string", arguments.message)) />
 		<cfset returnResource(connection) />
@@ -1119,6 +1418,9 @@ Thanks!
 	<!--- QUIT - String quit() --->
 	<cffunction name="quit" access="public" returntype="string" output="no">
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+
 		<cfset connection = getResource() />
 		<cfset result = connection.quit() />
 		<cfset returnResource(connection) />
@@ -1133,6 +1435,9 @@ Thanks!
 
 	<!--- RANDOMKEY - String randomKey() --->
 	<cffunction name="randomKey" access="public" returntype="string" output="no">
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
 
 		<cfset connection = getResource() />
 		<cfset result = connection.randomKey() />
@@ -1151,6 +1456,9 @@ Thanks!
 		<cfargument name="oldkey" type="string" required="yes" />
 		<cfargument name="newkey" type="string" required="yes" />
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+
 		<cfset connection = getResource() />
 		<cfset result = connection.rename(JavaCast("string", arguments.oldkey), JavaCast("string", arguments.newkey)) />
 		<cfset returnResource(connection) />
@@ -1168,6 +1476,9 @@ Thanks!
 		<cfargument name="oldkey" type="string" required="yes" />
 		<cfargument name="newkey" type="string" required="yes" />
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+
 		<cfset connection = getResource() />
 		<cfset result = connection.renamenx(JavaCast("string", arguments.oldkey), JavaCast("string", arguments.newkey)) />
 		<cfset returnResource(connection) />
@@ -1183,6 +1494,9 @@ Thanks!
 	<!--- RPOP - String rpop(String key) --->
 	<cffunction name="rpop" access="public" returntype="string" output="no">
 		<cfargument name="key" type="string" required="yes" />
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
 
 		<cfset connection = getResource() />
 		<cfset result = connection.rpop(JavaCast("string", arguments.key)) />
@@ -1201,6 +1515,9 @@ Thanks!
 		<cfargument name="srckey" type="string" required="yes" />
 		<cfargument name="dstkey" type="string" required="yes" />
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+
 		<cfset connection = getResource() />
 		<cfset result = connection.rpoplpush(JavaCast("string", arguments.srckey), JavaCast("string", arguments.dstkey)) />
 		<cfset returnResource(connection) />
@@ -1216,10 +1533,36 @@ Thanks!
 	<!--- RPUSH - Long rpush(String key, String string) --->
 	<cffunction name="rpush" access="public" returntype="numeric" output="no">
 		<cfargument name="key" type="string" required="yes" />
-		<cfargument name="string" type="string" required="yes" />
+		<cfargument name="string" type="any" required="yes" />
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
+		<cfset var namedArgumentCount = '' />
+		<cfset var stringArray = '' />
+		<cfset var i = '' />
+
+		<cfset namedArgumentCount = 2 />
+
+		<cfset stringArray = ArrayNew(1) />
+		<cfif isArray(arguments.string)>
+			<cfset stringArray = arguments.string />
+		<cfelseif isSimpleValue(arguments.string)>
+			<cfset ArrayAppend(stringArray, arguments.string) />
+
+			<!--- Treat additional non-named arguments as java-style varargs arguments --->
+			<cfif ArrayLen(arguments) GT namedArgumentCount>
+				<cfloop from="#(namedArgumentCount + 1)#" to="#ArrayLen(arguments)#" index="i">
+					<cfif isSimpleValue(arguments[i])>
+						<cfset ArrayAppend(stringArray, arguments[i]) />
+					</cfif>
+				</cfloop>
+			</cfif>
+		<cfelse>
+			<cfthrow type="InvalidArgumentTypeException" message="The string argument passed to the rpush method is not an array or one or more strings." />
+		</cfif>
 
 		<cfset connection = getResource() />
-		<cfset result = connection.rpush(JavaCast("string", arguments.key), JavaCast("string", arguments.string)) />
+		<cfset result = connection.rpush(JavaCast("string", arguments.key), JavaCast("string[]", stringArray)) />
 		<cfset returnResource(connection) />
 
 		<cfif isDefined("result")>
@@ -1230,10 +1573,14 @@ Thanks!
 	</cffunction>
 
 
+	<!--- FIXME: Change to use format Long rpushx(final String key, final String... string) --->
 	<!--- RPUSHX - Long rpushx(String key, String string) --->
 	<cffunction name="rpushx" access="public" returntype="numeric" output="no">
 		<cfargument name="key" type="string" required="yes" />
 		<cfargument name="string" type="string" required="yes" />
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
 
 		<cfset connection = getResource() />
 		<cfset result = connection.rpushx(JavaCast("string", arguments.key), JavaCast("string", arguments.string)) />
@@ -1250,10 +1597,36 @@ Thanks!
 	<!--- SADD - Long sadd(String key, String member) --->
 	<cffunction name="sadd" access="public" returntype="numeric" output="no">
 		<cfargument name="key" type="string" required="yes" />
-		<cfargument name="member" type="string" required="yes" />
+		<cfargument name="member" type="any" required="yes" />
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
+		<cfset var namedArgumentCount = '' />
+		<cfset var memberArray = '' />
+		<cfset var i = '' />
+
+		<cfset namedArgumentCount = 2 />
+
+		<cfset memberArray = ArrayNew(1) />
+		<cfif isArray(arguments.member)>
+			<cfset memberArray = arguments.member />
+		<cfelseif isSimpleValue(arguments.member)>
+			<cfset ArrayAppend(memberArray, arguments.member) />
+
+			<!--- Treat additional non-named arguments as java-style varargs arguments --->
+			<cfif ArrayLen(arguments) GT namedArgumentCount>
+				<cfloop from="#(namedArgumentCount + 1)#" to="#ArrayLen(arguments)#" index="i">
+					<cfif isSimpleValue(arguments[i])>
+						<cfset ArrayAppend(memberArray, arguments[i]) />
+					</cfif>
+				</cfloop>
+			</cfif>
+		<cfelse>
+			<cfthrow type="InvalidArgumentTypeException" message="The member argument passed to the sadd method is not an array or one or more strings." />
+		</cfif>
 
 		<cfset connection = getResource() />
-		<cfset result = connection.sadd(JavaCast("string", arguments.key), JavaCast("string", arguments.member)) />
+		<cfset result = connection.sadd(JavaCast("string", arguments.key), JavaCast("string[]", memberArray)) />
 		<cfset returnResource(connection) />
 
 		<cfif isDefined("result")>
@@ -1268,6 +1641,9 @@ Thanks!
 	<cffunction name="scard" access="public" returntype="numeric" output="no">
 		<cfargument name="key" type="string" required="yes" />
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+
 		<cfset connection = getResource() />
 		<cfset result = connection.scard(JavaCast("string", arguments.key)) />
 		<cfset returnResource(connection) />
@@ -1280,9 +1656,78 @@ Thanks!
 	</cffunction>
 
 
+	<!--- SCRIPTEXISTS - Boolean scriptExists(String sha1) --->
+	<!--- SCRIPTEXISTS - List<Boolean> scriptExists(String... sha1) --->
+	<!--- This method combines all scriptExists methods provided by Jedis --->
+	<cffunction name="scriptexists" access="public" returntype="any" output="no">
+		<cfargument name="sha1" type="any" required="yes" />
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
+		<cfset var namedArgumentCount = '' />
+		<cfset var sha1Array = '' />
+		<cfset var i = '' />
+
+		<cfset namedArgumentCount = 1 />
+
+		<cfset sha1Array = ArrayNew(1) />
+		<cfif isArray(arguments.sha1)>
+			<cfset sha1Array = arguments.sha1 />
+		<cfelseif isSimpleValue(arguments.sha1)>
+			<cfset ArrayAppend(sha1Array, arguments.sha1) />
+
+			<!--- Treat additional non-named arguments as java-style varargs arguments --->
+			<cfif ArrayLen(arguments) GT namedArgumentCount>
+				<cfloop from="#(namedArgumentCount + 1)#" to="#ArrayLen(arguments)#" index="i">
+					<cfif isSimpleValue(arguments[i])>
+						<cfset ArrayAppend(sha1Array, arguments[i]) />
+					</cfif>
+				</cfloop>
+			</cfif>
+		<cfelse>
+			<cfthrow type="InvalidArgumentTypeException" message="The sha1 argument passed to the scriptexists method is not an array or one or more strings." />
+		</cfif>
+
+		<cfset connection = getResource() />
+		<cfset result = connection.scriptexists(JavaCast("string[]", sha1Array)) />
+		<cfset returnResource(connection) />
+
+		<cfif isDefined("result")>
+			<cfreturn result.toArray() />
+		<cfelse>
+			<cfreturn ArrayNew(1) />
+		</cfif>
+	</cffunction>
+
+
+	<!--- SCRIPTLOAD - String scriptLoad(String script) --->
+	<cffunction name="scriptload" access="public" returntype="string" output="no">
+		<cfargument name="script" type="string" required="yes" />
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
+
+		<cfset connection = getResource() />
+		<cfset result = connection.scriptload(JavaCast("string", arguments.script)) />
+		<cfset returnResource(connection) />
+
+		<cfif isDefined("result")>
+			<cfreturn result />
+		<cfelse>
+			<cfreturn '' />
+		</cfif>
+	</cffunction>
+
+
 	<!--- SDIFF - Set<String> sdiff(String... keys) --->
 	<cffunction name="sdiff" access="public" returntype="array" output="no">
 		<cfargument name="keys" type="any" required="yes" />
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
+		<cfset var namedArgumentCount = '' />
+		<cfset var keysArray = '' />
+		<cfset var i = '' />
 
 		<cfset namedArgumentCount = 1 />
 
@@ -1321,6 +1766,12 @@ Thanks!
 		<cfargument name="dstkey" type="string" required="yes" />
 		<cfargument name="keys" type="any" required="yes" />
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+		<cfset var namedArgumentCount = '' />
+		<cfset var keysArray = '' />
+		<cfset var i = '' />
+
 		<cfset namedArgumentCount = 2 />
 
 		<cfset keysArray = ArrayNew(1) />
@@ -1357,6 +1808,9 @@ Thanks!
 	<cffunction name="select" access="public" returntype="string" output="no">
 		<cfargument name="index" type="numeric" required="yes" />
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+
 		<cfset connection = getResource() />
 		<cfset result = connection.select(JavaCast("int", arguments.index)) />
 		<cfset returnResource(connection) />
@@ -1373,6 +1827,9 @@ Thanks!
 	<cffunction name="set" access="public" returntype="string" output="no">
 		<cfargument name="key" type="string" required="yes" />
 		<cfargument name="value" type="string" required="yes" />
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
 
 		<cfset connection = getResource() />
 		<cfset result = connection.set(JavaCast("string", arguments.key), JavaCast("string", arguments.value)) />
@@ -1392,6 +1849,9 @@ Thanks!
 		<cfargument name="offset" type="numeric" required="yes" />
 		<cfargument name="value" type="boolean" required="yes" />
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+
 		<cfset connection = getResource() />
 		<cfset result = connection.setbit(JavaCast("string", arguments.key), JavaCast("long", arguments.offset), JavaCast("boolean", arguments.value)) />
 		<cfset returnResource(connection) />
@@ -1410,6 +1870,9 @@ Thanks!
 		<cfargument name="seconds" type="numeric" required="yes" />
 		<cfargument name="value" type="string" required="yes" />
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+
 		<cfset connection = getResource() />
 		<cfset result = connection.setex(JavaCast("string", arguments.key), JavaCast("int", arguments.seconds), JavaCast("string", arguments.value)) />
 		<cfset returnResource(connection) />
@@ -1426,6 +1889,9 @@ Thanks!
 	<cffunction name="setnx" access="public" returntype="numeric" output="no">
 		<cfargument name="key" type="string" required="yes" />
 		<cfargument name="value" type="string" required="yes" />
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
 
 		<cfset connection = getResource() />
 		<cfset result = connection.setnx(JavaCast("string", arguments.key), JavaCast("string", arguments.value)) />
@@ -1445,6 +1911,9 @@ Thanks!
 		<cfargument name="offset" type="numeric" required="yes" />
 		<cfargument name="value" type="string" required="yes" />
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+
 		<cfset connection = getResource() />
 		<cfset result = connection.setrange(JavaCast("string", arguments.key), JavaCast("long", arguments.offset), JavaCast("string", arguments.value)) />
 		<cfset returnResource(connection) />
@@ -1460,6 +1929,12 @@ Thanks!
 	<!--- SINTER - Set<String> sinter(String... keys) --->
 	<cffunction name="sinter" access="public" returntype="array" output="no">
 		<cfargument name="keys" type="any" required="yes" />
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
+		<cfset var namedArgumentCount = '' />
+		<cfset var keysArray = '' />
+		<cfset var i = '' />
 
 		<cfset namedArgumentCount = 1 />
 
@@ -1498,6 +1973,12 @@ Thanks!
 		<cfargument name="dstkey" type="string" required="yes" />
 		<cfargument name="keys" type="any" required="yes" />
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+		<cfset var namedArgumentCount = '' />
+		<cfset var keysArray = '' />
+		<cfset var i = '' />
+
 		<cfset namedArgumentCount = 2 />
 
 		<cfset keysArray = ArrayNew(1) />
@@ -1535,6 +2016,9 @@ Thanks!
 		<cfargument name="key" type="string" required="yes" />
 		<cfargument name="member" type="string" required="yes" />
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+
 		<cfset connection = getResource() />
 		<cfset result = connection.sismember(JavaCast("string", arguments.key), JavaCast("string", arguments.member)) />
 		<cfset returnResource(connection) />
@@ -1550,6 +2034,9 @@ Thanks!
 	<!--- SMEMBERS - Set<String> smembers(String key) --->
 	<cffunction name="smembers" access="public" returntype="array" output="no">
 		<cfargument name="key" type="string" required="yes" />
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
 
 		<cfset connection = getResource() />
 		<cfset result = connection.smembers(JavaCast("string", arguments.key)) />
@@ -1568,6 +2055,9 @@ Thanks!
 		<cfargument name="srckey" type="string" required="yes" />
 		<cfargument name="dstkey" type="string" required="yes" />
 		<cfargument name="member" type="string" required="yes" />
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
 
 		<cfset connection = getResource() />
 		<cfset result = connection.smove(JavaCast("string", arguments.srckey), JavaCast("string", arguments.dstkey), JavaCast("string", arguments.member)) />
@@ -1590,6 +2080,9 @@ Thanks!
 		<cfargument name="key" type="string" required="yes" />
 		<cfargument name="sortingParameters" type="any" required="no" />
 		<cfargument name="dstkey" type="string" required="no" />
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
 
 		<cfset connection = getResource() />
 		<cfif IsDefined("arguments.sortingParameters") AND IsDefined("arguments.dstkey")>
@@ -1624,6 +2117,9 @@ Thanks!
 	<cffunction name="spop" access="public" returntype="string" output="no">
 		<cfargument name="key" type="string" required="yes" />
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+
 		<cfset connection = getResource() />
 		<cfset result = connection.spop(JavaCast("string", arguments.key)) />
 		<cfset returnResource(connection) />
@@ -1639,6 +2135,9 @@ Thanks!
 	<!--- SRANDMEMBER - String srandmember(String key) --->
 	<cffunction name="srandmember" access="public" returntype="string" output="no">
 		<cfargument name="key" type="string" required="yes" />
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
 
 		<cfset connection = getResource() />
 		<cfset result = connection.srandmember(JavaCast("string", arguments.key)) />
@@ -1657,8 +2156,34 @@ Thanks!
 		<cfargument name="key" type="string" required="yes" />
 		<cfargument name="member" type="string" required="yes" />
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+		<cfset var namedArgumentCount = '' />
+		<cfset var memberArray = '' />
+		<cfset var i = '' />
+
+		<cfset namedArgumentCount = 2 />
+
+		<cfset memberArray = ArrayNew(1) />
+		<cfif isArray(arguments.member)>
+			<cfset memberArray = arguments.member />
+		<cfelseif isSimpleValue(arguments.member)>
+			<cfset ArrayAppend(memberArray, arguments.member) />
+
+			<!--- Treat additional non-named arguments as java-style varargs arguments --->
+			<cfif ArrayLen(arguments) GT namedArgumentCount>
+				<cfloop from="#(namedArgumentCount + 1)#" to="#ArrayLen(arguments)#" index="i">
+					<cfif isSimpleValue(arguments[i])>
+						<cfset ArrayAppend(memberArray, arguments[i]) />
+					</cfif>
+				</cfloop>
+			</cfif>
+		<cfelse>
+			<cfthrow type="InvalidArgumentTypeException" message="The member argument passed to the srem method is not an array or one or more strings." />
+		</cfif>
+
 		<cfset connection = getResource() />
-		<cfset result = connection.srem(JavaCast("string", arguments.key), JavaCast("string", arguments.member)) />
+		<cfset result = connection.srem(JavaCast("string", arguments.key), JavaCast("string[]", memberArray)) />
 		<cfset returnResource(connection) />
 
 		<cfif isDefined("result")>
@@ -1672,6 +2197,9 @@ Thanks!
 	<!--- STRLEN - Long strlen(String key) --->
 	<cffunction name="strlen" access="public" returntype="numeric" output="no">
 		<cfargument name="key" type="string" required="yes" />
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
 
 		<cfset connection = getResource() />
 		<cfset result = connection.strlen(JavaCast("string", arguments.key)) />
@@ -1689,6 +2217,12 @@ Thanks!
 	<cffunction name="subscribe" access="public" returntype="void" output="no">
 		<cfargument name="jedisPubSub" type="any" required="yes" />
 		<cfargument name="channels" type="any" required="yes" />
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
+		<cfset var namedArgumentCount = '' />
+		<cfset var channelsArray = '' />
+		<cfset var i = '' />
 
 		<cfset namedArgumentCount = 2 />
 
@@ -1724,6 +2258,9 @@ Thanks!
 		<cfargument name="start" type="numeric" required="yes" />
 		<cfargument name="end" type="numeric" required="yes" />
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+
 		<cfset connection = getResource() />
 		<cfset result = connection.substr(JavaCast("string", arguments.key), JavaCast("int", arguments.start), JavaCast("int", arguments.end)) />
 		<cfset returnResource(connection) />
@@ -1739,6 +2276,12 @@ Thanks!
 	<!--- SUNION - Set<String> sunion(String... keys) --->
 	<cffunction name="sunion" access="public" returntype="array" output="no">
 		<cfargument name="keys" type="any" required="yes" />
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
+		<cfset var namedArgumentCount = '' />
+		<cfset var keysArray = '' />
+		<cfset var i = '' />
 
 		<cfset namedArgumentCount = 1 />
 
@@ -1777,6 +2320,12 @@ Thanks!
 		<cfargument name="dstkey" type="string" required="yes" />
 		<cfargument name="keys" type="any" required="yes" />
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+		<cfset var namedArgumentCount = '' />
+		<cfset var keysArray = '' />
+		<cfset var i = '' />
+
 		<cfset namedArgumentCount = 2 />
 
 		<cfset keysArray = ArrayNew(1) />
@@ -1813,6 +2362,9 @@ Thanks!
 	<cffunction name="ttl" access="public" returntype="numeric" output="no">
 		<cfargument name="key" type="string" required="yes" />
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+
 		<cfset connection = getResource() />
 		<cfset result = connection.ttl(JavaCast("string", arguments.key)) />
 		<cfset returnResource(connection) />
@@ -1829,6 +2381,9 @@ Thanks!
 	<cffunction name="type" access="public" returntype="string" output="no">
 		<cfargument name="key" type="string" required="yes" />
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+
 		<cfset connection = getResource() />
 		<cfset result = connection.type(JavaCast("string", arguments.key)) />
 		<cfset returnResource(connection) />
@@ -1844,6 +2399,12 @@ Thanks!
 	<!--- WATCH - String watch(String... keys) --->
 	<cffunction name="watch" access="public" returntype="string" output="no">
 		<cfargument name="keys" type="any" required="yes" />
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
+		<cfset var namedArgumentCount = '' />
+		<cfset var keysArray = '' />
+		<cfset var i = '' />
 
 		<cfset namedArgumentCount = 1 />
 
@@ -1883,6 +2444,9 @@ Thanks!
 		<cfargument name="score" type="numeric" required="yes" />
 		<cfargument name="member" type="string" required="yes" />
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+
 		<cfset connection = getResource() />
 		<cfset result = connection.zadd(JavaCast("string", arguments.key), JavaCast("double", arguments.score), JavaCast("string", arguments.member)) />
 		<cfset returnResource(connection) />
@@ -1898,6 +2462,9 @@ Thanks!
 	<!--- ZCARD - Long zcard(String key) --->
 	<cffunction name="zcard" access="public" returntype="numeric" output="no">
 		<cfargument name="key" type="string" required="yes" />
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
 
 		<cfset connection = getResource() />
 		<cfset result = connection.zcard(JavaCast("string", arguments.key)) />
@@ -1917,6 +2484,9 @@ Thanks!
 		<cfargument name="min" type="numeric" required="yes" />
 		<cfargument name="max" type="numeric" required="yes" />
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+
 		<cfset connection = getResource() />
 		<cfset result = connection.zcount(JavaCast("string", arguments.key), JavaCast("double", arguments.min), JavaCast("double", arguments.max)) />
 		<cfset returnResource(connection) />
@@ -1934,6 +2504,9 @@ Thanks!
 		<cfargument name="key" type="string" required="yes" />
 		<cfargument name="score" type="numeric" required="yes" />
 		<cfargument name="member" type="string" required="yes" />
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
 
 		<cfset connection = getResource() />
 		<cfset result = connection.zincrby(JavaCast("string", arguments.key), JavaCast("double", arguments.score), JavaCast("string", arguments.member)) />
@@ -1954,6 +2527,12 @@ Thanks!
 		<cfargument name="dstkey" type="string" required="yes" />
 		<cfargument name="params" type="any" required="no" />
 		<cfargument name="sets" type="any" required="yes" />
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
+		<cfset var namedArgumentCount = '' />
+		<cfset var setsArray = '' />
+		<cfset var i = '' />
 
 		<cfset namedArgumentCount = 3 />
 
@@ -1997,6 +2576,9 @@ Thanks!
 		<cfargument name="start" type="numeric" required="yes" />
 		<cfargument name="end" type="numeric" required="yes" />
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+
 		<cfset connection = getResource() />
 		<cfset result = connection.zrange(JavaCast("string", arguments.key), JavaCast("int", arguments.start), JavaCast("int", arguments.end)) />
 		<cfset returnResource(connection) />
@@ -2019,6 +2601,11 @@ Thanks!
 		<cfargument name="max" type="string" required="yes" />
 		<cfargument name="offset" type="numeric" required="no" />
 		<cfargument name="count" type="numeric" required="no" />
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
+		<cfset var minJavaType = '' />
+		<cfset var maxJavaType = '' />
 
 		<cfset minJavaType = Iif(IsNumeric(arguments.min),DE("double"),DE("string")) />
 		<cfset maxJavaType = Iif(IsNumeric(arguments.max),DE("double"),DE("string")) />
@@ -2049,6 +2636,9 @@ Thanks!
 		<cfargument name="offset" type="numeric" required="no" />
 		<cfargument name="count" type="numeric" required="no" />
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+
 		<cfset connection = getResource() />
 		<cfif IsDefined("arguments.offset") AND IsDefined("arguments.count")>
 			<cfset result = connection.zrangeByScoreWithScores(JavaCast("string", arguments.key), JavaCast("double", arguments.min), JavaCast("double", arguments.max), JavaCast("int", arguments.offset), JavaCast("int", arguments.count)) />
@@ -2071,6 +2661,9 @@ Thanks!
 		<cfargument name="start" type="numeric" required="yes" />
 		<cfargument name="end" type="numeric" required="yes" />
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+
 		<cfset connection = getResource() />
 		<cfset result = connection.zrangeWithScores(JavaCast("string", arguments.key), JavaCast("int", arguments.start), JavaCast("int", arguments.end)) />
 		<cfset returnResource(connection) />
@@ -2088,6 +2681,9 @@ Thanks!
 		<cfargument name="key" type="string" required="yes" />
 		<cfargument name="member" type="string" required="yes" />
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+
 		<cfset connection = getResource() />
 		<cfset result = connection.zrank(JavaCast("string", arguments.key), JavaCast("string", arguments.member)) />
 		<cfset returnResource(connection) />
@@ -2100,10 +2696,14 @@ Thanks!
 	</cffunction>
 
 
+	<!--- FIXME: Convert to use format Long zrem(final String key, final String... members) --->
 	<!--- ZREM - Long zrem(String key, String member) --->
 	<cffunction name="zrem" access="public" returntype="numeric" output="no">
 		<cfargument name="key" type="string" required="yes" />
 		<cfargument name="member" type="string" required="yes" />
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
 
 		<cfset connection = getResource() />
 		<cfset result = connection.zrem(JavaCast("string", arguments.key), JavaCast("string", arguments.member)) />
@@ -2123,6 +2723,9 @@ Thanks!
 		<cfargument name="start" type="numeric" required="yes" />
 		<cfargument name="end" type="numeric" required="yes" />
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+
 		<cfset connection = getResource() />
 		<cfset result = connection.zremrangeByRank(JavaCast("string", arguments.key), JavaCast("int", arguments.start), JavaCast("int", arguments.end)) />
 		<cfset returnResource(connection) />
@@ -2141,6 +2744,9 @@ Thanks!
 		<cfargument name="start" type="numeric" required="yes" />
 		<cfargument name="end" type="numeric" required="yes" />
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+
 		<cfset connection = getResource() />
 		<cfset result = connection.zremrangeByScore(JavaCast("string", arguments.key), JavaCast("double", arguments.start), JavaCast("double", arguments.end)) />
 		<cfset returnResource(connection) />
@@ -2158,6 +2764,9 @@ Thanks!
 		<cfargument name="key" type="string" required="yes" />
 		<cfargument name="start" type="numeric" required="yes" />
 		<cfargument name="end" type="numeric" required="yes" />
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
 
 		<cfset connection = getResource() />
 		<cfset result = connection.zrevrange(JavaCast("string", arguments.key), JavaCast("int", arguments.start), JavaCast("int", arguments.end)) />
@@ -2181,6 +2790,11 @@ Thanks!
 		<cfargument name="min" type="string" required="yes" />
 		<cfargument name="offset" type="numeric" required="no" />
 		<cfargument name="count" type="numeric" required="no" />
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
+		<cfset var minJavaType = '' />
+		<cfset var maxJavaType = '' />
 
 		<cfset maxJavaType = Iif(IsNumeric(arguments.max),DE("double"),DE("string")) />
 		<cfset minJavaType = Iif(IsNumeric(arguments.min),DE("double"),DE("string")) />
@@ -2211,6 +2825,9 @@ Thanks!
 		<cfargument name="offset" type="numeric" required="no" />
 		<cfargument name="count" type="numeric" required="no" />
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+
 		<cfset connection = getResource() />
 		<cfif IsDefined("arguments.offset") AND IsDefined("arguments.count")>
 			<cfset result = connection.zrevrangeByScoreWithScores(JavaCast("string", arguments.key), JavaCast("double", arguments.max), JavaCast("double", arguments.min), JavaCast("int", arguments.offset), JavaCast("int", arguments.count)) />
@@ -2233,6 +2850,9 @@ Thanks!
 		<cfargument name="start" type="numeric" required="yes" />
 		<cfargument name="end" type="numeric" required="yes" />
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+
 		<cfset connection = getResource() />
 		<cfset result = connection.zrevrangeWithScores(JavaCast("string", arguments.key), JavaCast("int", arguments.start), JavaCast("int", arguments.end)) />
 		<cfset returnResource(connection) />
@@ -2250,6 +2870,9 @@ Thanks!
 		<cfargument name="key" type="string" required="yes" />
 		<cfargument name="member" type="string" required="yes" />
 
+		<cfset var connection = '' />
+		<cfset var result = '' />
+
 		<cfset connection = getResource() />
 		<cfset result = connection.zrevrank(JavaCast("string", arguments.key), JavaCast("string", arguments.member)) />
 		<cfset returnResource(connection) />
@@ -2266,6 +2889,9 @@ Thanks!
 	<cffunction name="zscore" access="public" returntype="numeric" output="no">
 		<cfargument name="key" type="string" required="yes" />
 		<cfargument name="member" type="string" required="yes" />
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
 
 		<cfset connection = getResource() />
 		<cfset result = connection.zscore(JavaCast("string", arguments.key), JavaCast("string", arguments.member)) />
@@ -2286,6 +2912,12 @@ Thanks!
 		<cfargument name="dstkey" type="string" required="yes" />
 		<cfargument name="params" type="any" required="no" />
 		<cfargument name="sets" type="any" required="yes" />
+
+		<cfset var connection = '' />
+		<cfset var result = '' />
+		<cfset var namedArgumentCount = '' />
+		<cfset var setsArray = '' />
+		<cfset var i = '' />
 
 		<cfset namedArgumentCount = 3 />
 
