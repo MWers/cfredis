@@ -1,10 +1,12 @@
 # cfredis #
 
-cfredis is a ColdFusion wrapper for the [Jedis](https://github.com/xetorthio/jedis/) Java client for [Redis](http://redis.io/).
+cfredis is a ColdFusion client for [Redis](http://redis.io/). It acts as a wrapper for the excellent [Jedis](https://github.com/xetorthio/jedis/) Java client for [Redis](http://redis.io/).
+
+## Configuring cfredis ##
 
 To use cfredis, first download Jedis and place it somewhere within your ColdFusion classpath like `[CFHOME]/lib` (or better yet, use JavaLoader to include it):
 
-https://github.com/xetorthio/jedis/downloads
+<https://github.com/xetorthio/jedis/downloads>
 
 Jedis depends on [Apache Commons Pool](http://commons.apache.org/proper/commons-pool/download_pool.cgi) which should also be downloaded and added to your ColdFusion classpath or included via JavaLoader.
 
@@ -33,12 +35,20 @@ application.redis = CreateObject("component", "cfc.cfredis").init();
 application.redis.connectionPool = this.jedisPool;
 ```
 
-On a page where you wish to make a Redis connection, do so as follows:
+## Using cfredis ##
+
+Use the `application.redis` object to execute Redis commands:
 
 ```cfm
 <cfset application.redis.set("your:key:name", "key value") />
 <cfset value = application.redis.get("your:key:name") />
 ```
+
+## Examples ##
+
+I've included a number of [examples](https://github.com/MWers/cfredis/tree/master/examples) using cfredis.
+
+## Redis Commands Implemented ##
 
 cfredis implements all of the Redis methods implemented in redis.clients.jedis.Jedis with the following changes:
 
@@ -55,12 +65,16 @@ cfredis implements all of the Redis methods implemented in redis.clients.jedis.J
 
 * Transactions and Pipelining are not yet supported
 
+## Support ##
+
 If you have any problems with cfredis, please submit an issue:
 
-https://github.com/MWers/cfredis/issues
+<https://github.com/MWers/cfredis/issues>
+
+## How To Help ##
 
 If you'd like to help to make cfredis better, please fork this project and submit a pull request. A great place to start would be in creating MXUnit tests. They can be based on the Jedis JUnit tests here:
 
-https://github.com/xetorthio/jedis/tree/master/src/test/java/redis/clients/jedis/tests
+<https://github.com/xetorthio/jedis/tree/master/src/test/java/redis/clients/jedis/tests>
 
 Thanks!
