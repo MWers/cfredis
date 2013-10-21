@@ -13,6 +13,7 @@ Jedis depends on [Apache Commons Pool](http://commons.apache.org/proper/commons-
 Then place the following initialization code in the `OnApplicationStart` method in `Application.cfc`, in `OnRequestStart.cfm`, or in `Application.cfm`:
 
 ```cfm
+<cfscript>
 this.redisHost = "localhost";
 this.redisPort = 6379;
 
@@ -33,6 +34,7 @@ this.jedisPool.init(this.jedisPoolConfig, this.redisHost, this.redisPort);
 
 application.redis = CreateObject("component", "cfc.cfredis").init();
 application.redis.connectionPool = this.jedisPool;
+</cfscript>
 ```
 
 ## Using cfredis ##
@@ -48,7 +50,10 @@ Use the `application.redis` object to execute Redis commands:
 
 I've included a number of [examples](https://github.com/MWers/cfredis/tree/master/examples) using cfredis.
 
-## Redis Commands Implemented ##
+## Redis Commands ##
+
+* [Redis Command Reference](http://redis.io/commands)
+* [Jedis Command Reference](http://www.ostools.net/uploads/apidocs/jedis-2.1.0/redis/clients/jedis/Commands.html)
 
 cfredis implements all of the Redis methods implemented in redis.clients.jedis.Jedis with the following changes:
 
