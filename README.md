@@ -1,41 +1,48 @@
 # cfredis #
 
-cfredis is a ColdFusion client for [Redis](http://redis.io/). It acts as a wrapper for the excellent [Jedis](https://github.com/xetorthio/jedis/) Java client for [Redis](http://redis.io/).
+cfredis is a ColdFusion client for [Redis](http://redis.io/). It acts as a wrapper for [Jedis](https://github.com/xetorthio/jedis/), a Java client for [Redis](http://redis.io/). It has been tested on ColdFusion 8, ColdFusion 9, and ColdFusion 10.
 
 ## Configuring cfredis ##
 
-To use cfredis, first download Jedis and place it somewhere within your ColdFusion classpath like `[CFHOME]/lib` (or better yet, use JavaLoader to include it):
+### Installing Dependencies ###
+To use cfredis, you first need to install [Jedis](https://github.com/xetorthio/jedis/) and [Apache Commons Pool](http://commons.apache.org/proper/commons-pool/). You should download both [jedis-2.1.0.jar](https://github.com/downloads/xetorthio/jedis/jedis-2.1.0.jar) and [commons-pool-1.6-bin.tar.gz](http://www.bizdirusa.com/mirrors/apache//commons/pool/binaries/commons-pool-1.6-bin.tar.gz). Within the `commons-pool-1.6-bin.tar.gz` archive, you will find `commons-pool-1.6.jar`. Copy `jedis-2.1.0.jar` and `commons-pool-1.6.jar` to `_cfroot_/lib` and restart ColdFusion or use [JavaLoader](https://github.com/markmandel/JavaLoader) to include `jedis-2.1.0.jar` and `commons-pool-1.6.jar`.
 
-<https://github.com/xetorthio/jedis/downloads>
+### Installing the CFC ###
 
-Jedis depends on [Apache Commons Pool](http://commons.apache.org/proper/commons-pool/download_pool.cgi) which should also be downloaded and added to your ColdFusion classpath or included via JavaLoader.
+Copy [src/cfc/cfredis.cfc](https://github.com/MWers/cfredis/blob/master/src/cfc/cfredis.cfc) to wherever you store your CFCs or clone the cfredis repository into your webroot.
 
-Then place the following initialization code in the `OnApplicationStart` method in `Application.cfc`, in `OnRequestStart.cfm`, or in `Application.cfm`:
+### Initializing cfredis ###
+
+Place the following initialization code in the `OnApplicationStart` method in `Application.cfc`, in `Application.cfm`, or in `OnRequestStart.cfm`:
 
 ```cfm
 <cfscript>
-this.redisHost = "localhost";
-this.redisPort = 6379;
+local.redisHost = "localhost";  // redis server hostname or ip address
+local.redisPort = 6379;         // redis server ip address
 
-// Set connection pool configuration
-this.jedisPoolConfig = CreateObject("java", "redis.clients.jedis.JedisPoolConfig");
-this.jedisPoolConfig.init();
-this.jedisPoolConfig.testOnBorrow = false;
-this.jedisPoolConfig.testOnReturn = false;
-this.jedisPoolConfig.testWhileIdle = true;
-this.jedisPoolConfig.maxActive = 100;
-this.jedisPoolConfig.maxIdle = 5;
-this.jedisPoolConfig.numTestsPerEvictionRun = 10;
-this.jedisPoolConfig.timeBetweenEvictionRunsMillis = 10000;
-this.jedisPoolConfig.maxWait = 3000;
+// Configure connection pool
+local.jedisPoolConfig = CreateObject("java", "redis.clients.jedis.JedisPoolConfig");
+local.jedisPoolConfig.init();
+local.jedisPoolConfig.testOnBorrow = false;
+local.jedisPoolConfig.testOnReturn = false;
+local.jedisPoolConfig.testWhileIdle = true;
+local.jedisPoolConfig.maxActive = 100;
+local.jedisPoolConfig.maxIdle = 5;
+local.jedisPoolConfig.numTestsPerEvictionRun = 10;
+local.jedisPoolConfig.timeBetweenEvictionRunsMillis = 10000;
+local.jedisPoolConfig.maxWait = 3000;
 
-this.jedisPool = CreateObject("java", "redis.clients.jedis.JedisPool");
-this.jedisPool.init(this.jedisPoolConfig, this.redisHost, this.redisPort);
+local.jedisPool = CreateObject("java", "redis.clients.jedis.JedisPool");
+local.jedisPool.init(local.jedisPoolConfig, local.redisHost, local.redisPort);
 
 // The "cfc.cfredis" component name will change depending on where you put cfredis
-application.redis = CreateObject("component", "cfc.cfredis").init();
-application.redis.connectionPool = this.jedisPool;
+local.redis = CreateObject("component", "cfc.cfredis").init();
+local.redis.connectionPool = local.jedisPool;
 </cfscript>
+
+<cflock scope="Application" type="exclusive" timeout="10">
+    <cfset application.redis = local.redis />
+</cflock>
 ```
 
 ## Using cfredis ##
