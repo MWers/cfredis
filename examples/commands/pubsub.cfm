@@ -1,6 +1,9 @@
 <cfset pageTitle = 'pub/sub' />
 <cfinclude template="../includes/header.cfm" />
 
+<!--- Set up example data --->
+<cfset application.redis.del("example:pubsub:test-channel") />
+
 <h3>Subscribe to a channel in the Redis CLI</h3>
 <pre>
 $ redis-cli
@@ -33,7 +36,7 @@ result4 = application.redis.publish("example:pubsub:test-channel", "test message
 
 <hr />
 
-<h3>Receive messages in Redis CLI</h3>
+<h3>Expected messages in Redis CLI</h3>
 <pre>
 1) "message"
 2) "example:pubsub:test-channel"
@@ -50,3 +53,6 @@ result4 = application.redis.publish("example:pubsub:test-channel", "test message
 </pre>
 
 <cfinclude template="../includes/footer.cfm" />
+
+<!--- Clean up example data --->
+<cfset application.redis.del("example:pubsub:test-channel") />

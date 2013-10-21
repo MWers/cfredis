@@ -36,3 +36,7 @@ application.redis.get('example:command:get:foo')
 <hr />
 
 <cfinclude template="../includes/footer.cfm" />
+
+<!--- Clean up example data --->
+<cfset application.redis.del("example:command:get:keyname") />
+<cfset application.redis.del("example:command:get:foo") />

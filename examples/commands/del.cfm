@@ -63,3 +63,6 @@ result = application.redis.del(stringArray);
 <hr />
 
 <cfinclude template="../includes/footer.cfm" />
+
+<!--- Clean up example data --->
+<cfset application.redis.del("example:command:del:key4") />

@@ -89,3 +89,6 @@ application.redis.hgetall(redisKey)
 <hr />
 
 <cfinclude template="../includes/footer.cfm" />
+
+<!--- Clean up example data --->
+<cfset application.redis.del("example:command:hmset") />

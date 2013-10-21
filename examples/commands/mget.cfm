@@ -47,3 +47,9 @@ result = application.redis.mget(keys);
 </cfloop>
 
 <cfinclude template="../includes/footer.cfm" />
+
+<!--- Clean up example data --->
+<cfset application.redis.del("example:command:mget:key1") />
+<cfset application.redis.del("example:command:mget:key2") />
+<cfset application.redis.del("example:command:mget:key3") />
+<cfset application.redis.del("example:command:mget:key4") />
