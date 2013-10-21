@@ -5,7 +5,9 @@ cfredis is a ColdFusion client for [Redis](http://redis.io/). It acts as a wrapp
 ## Configuring cfredis ##
 
 ### Installing Dependencies ###
-To use cfredis, you first need to install [Jedis](https://github.com/xetorthio/jedis/) and [Apache Commons Pool](http://commons.apache.org/proper/commons-pool/). You should download both [jedis-2.1.0.jar](https://github.com/downloads/xetorthio/jedis/jedis-2.1.0.jar) and [commons-pool-1.6-bin.tar.gz](http://www.bizdirusa.com/mirrors/apache//commons/pool/binaries/commons-pool-1.6-bin.tar.gz). Within the `commons-pool-1.6-bin.tar.gz` archive, you will find `commons-pool-1.6.jar`. Copy `jedis-2.1.0.jar` and `commons-pool-1.6.jar` to `_cfroot_/lib` and restart ColdFusion or use [JavaLoader](https://github.com/markmandel/JavaLoader) to include `jedis-2.1.0.jar` and `commons-pool-1.6.jar`.
+cfredis requires [Jedis](https://github.com/xetorthio/jedis/) and [Apache Commons Pool](http://commons.apache.org/proper/commons-pool/), specifically [jedis-2.1.0.jar](https://github.com/downloads/xetorthio/jedis/jedis-2.1.0.jar) and [commons-pool-1.6-bin.tar.gz](http://www.bizdirusa.com/mirrors/apache//commons/pool/binaries/commons-pool-1.6-bin.tar.gz). 
+
+Within the `commons-pool-1.6-bin.tar.gz` archive, you will find `commons-pool-1.6.jar`. Copy `jedis-2.1.0.jar` and `commons-pool-1.6.jar` to `_cfroot_/lib` and restart ColdFusion. You may also use [JavaLoader](https://github.com/markmandel/JavaLoader) to include `jedis-2.1.0.jar` and `commons-pool-1.6.jar`.
 
 ### Installing the CFC ###
 
