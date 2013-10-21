@@ -32,6 +32,7 @@ this.jedisPoolConfig.maxWait = 3000;
 this.jedisPool = CreateObject("java", "redis.clients.jedis.JedisPool");
 this.jedisPool.init(this.jedisPoolConfig, this.redisHost, this.redisPort);
 
+// The "cfc.cfredis" component name will change depending on where you put cfredis
 application.redis = CreateObject("component", "cfc.cfredis").init();
 application.redis.connectionPool = this.jedisPool;
 </cfscript>
