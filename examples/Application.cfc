@@ -9,6 +9,10 @@
         <cfscript>
             local.redisHost = "localhost";    // redis server hostname or ip address
             local.redisPort = 6379;           // redis server ip address
+            local.redisTimeout = 2000;        // redis connection timeout
+
+            // If your server requires a password, uncomment the following line and set it.
+            // local.redisPassword = "foobared"; // redis server password
 
             // Set connection pool configuration
             // http://www.ostools.net/uploads/apidocs/jedis-2.1.0/redis/clients/jedis/JedisPoolConfig.html
@@ -24,7 +28,11 @@
             local.jedisPoolConfig.maxWait = 3000;
 
             local.jedisPool = CreateObject("java", "redis.clients.jedis.JedisPool");
-            local.jedisPool.init(local.jedisPoolConfig, local.redisHost, local.redisPort);
+            if (StructKeyExists(local, "redisPassword")) {
+                local.jedisPool.init(local.jedisPoolConfig, local.redisHost, local.redisPort, local.redisTimeout, local.redisPassword);
+            } else {
+                local.jedisPool.init(local.jedisPoolConfig, local.redisHost, local.redisPort);
+            }
 
             local.redis = CreateObject("component", "cfc.cfredis").init();
             local.redis.connectionPool = local.jedisPool;
