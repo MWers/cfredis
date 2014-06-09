@@ -120,6 +120,7 @@ Thanks!
 
 
     <!--- AUTH - String auth(String password) --->
+    <!--- It's advised to set server password when creating the JedisPool instance rather than using AUTH --->
     <cffunction name="auth" access="public" returntype="string" output="no">
         <cfargument name="password" type="string" required="yes" />
 
