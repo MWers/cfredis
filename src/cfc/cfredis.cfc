@@ -120,6 +120,7 @@ Thanks!
 
 
     <!--- AUTH - String auth(String password) --->
+    <!--- It's advised to set server password when creating the JedisPool instance rather than using AUTH --->
     <cffunction name="auth" access="public" returntype="string" output="no">
         <cfargument name="password" type="string" required="yes" />
 
@@ -526,14 +527,14 @@ Thanks!
 
 
     <!--- GET - String get(String key) --->
-    <cffunction name="get" access="public" returntype="any" output="no">
+    <cffunction name="get" access="public" returntype="string" output="no">
         <cfargument name="key" type="string" required="yes" />
 
         <cfset var connection = '' />
         <cfset var result = '' />
 
         <cfset connection = getResource() />
-        <cfset result = this.deserialize( connection.get(JavaCast("string", arguments.key)) )/>
+        <cfset result = connection.get(JavaCast("string", arguments.key)) />
         <cfset returnResource(connection) />
 
         <cfif isDefined("result")>
@@ -1832,16 +1833,16 @@ Thanks!
     </cffunction>
 
 
-    <!--- SET - String set(String key, value) --->
+    <!--- SET - String set(String key, String value) --->
     <cffunction name="set" access="public" returntype="string" output="no">
         <cfargument name="key" type="string" required="yes" />
-        <cfargument name="value" type="any" required="yes" />
+        <cfargument name="value" type="string" required="yes" />
 
         <cfset var connection = '' />
         <cfset var result = '' />
 
         <cfset connection = getResource() />
-        <cfset result = connection.set(JavaCast("string", arguments.key), JavaCast("string", this.serialize(arguments.value))) />
+        <cfset result = connection.set(JavaCast("string", arguments.key), JavaCast("string", arguments.value)) />
         <cfset returnResource(connection) />
 
         <cfif isDefined("result")>
@@ -2962,37 +2963,5 @@ Thanks!
             <cfreturn 0 />
         </cfif>
     </cffunction>
-
-
-
-
-    <cffunction name="serialize" access="package" output="false" returntype="any"
-        hint="Serializes the given value from a byte stream.">
-        <cfargument name="value" required="true" />
-        <cfscript>
-            var ret = "";
-            if (isSimpleValue(arguments.value)) {
-                ret = arguments.value;
-            } else {
-                ret = "ENC~" & toBase64( objectSave(arguments.value) );
-            }
-        </cfscript>
-        <cfreturn ret>
-    </cffunction>
-
-    <cffunction name="deserialize" access="package" output="false" returntype="any"
-        hint="Deserializes the given value from a byte stream. this works with multiple keys being returned" >
-        <cfargument name="value" required="true" type="any" default="" />
-
-        <cfif isSimpleValue(arguments.value) AND left( arguments.value, 4 ) IS "ENC~">
-            <cfreturn objectLoad( toBinary( right( arguments.value, len(arguments.value)-4 ) ) )>
-        </cfif>
-
-        <cfreturn arguments.value />
-    </cffunction>
-
-
-
-
 
 </cfcomponent>
