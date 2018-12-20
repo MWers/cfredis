@@ -1033,18 +1033,39 @@ Thanks!
         </cfif>
     </cffunction>
 
-
-    <!--- FIXME: Change to use format Long lpush(final String key, final String... strings) --->
     <!--- LPUSH - Long lpush(String key, String string) --->
     <cffunction name="lpush" access="public" returntype="numeric" output="no">
         <cfargument name="key" type="string" required="yes" />
-        <cfargument name="string" type="string" required="yes" />
+        <cfargument name="string" type="any" required="yes" />
 
         <cfset var connection = '' />
         <cfset var result = '' />
+        <cfset var namedArgumentCount = '' />
+        <cfset var stringArray = '' />
+        <cfset var i = '' />
+
+        <cfset namedArgumentCount = 2 />
+
+        <cfset stringArray = ArrayNew(1) />
+        <cfif isArray(arguments.string)>
+            <cfset stringArray = arguments.string />
+        <cfelseif isSimpleValue(arguments.string)>
+            <cfset ArrayAppend(stringArray, arguments.string) />
+
+            <!--- Treat additional non-named arguments as java-style varargs arguments --->
+            <cfif ArrayLen(arguments) GT namedArgumentCount>
+                <cfloop from="#(namedArgumentCount + 1)#" to="#ArrayLen(arguments)#" index="i">
+                    <cfif isSimpleValue(arguments[i])>
+                        <cfset ArrayAppend(stringArray, arguments[i]) />
+                    </cfif>
+                </cfloop>
+            </cfif>
+        <cfelse>
+            <cfthrow type="InvalidArgumentTypeException" message="The string argument passed to the rpush method is not an array or one or more strings." />
+        </cfif>
 
         <cfset connection = getResource() />
-        <cfset result = connection.lpush(JavaCast("string", arguments.key), JavaCast("string", arguments.string)) />
+        <cfset result = connection.lpush(JavaCast("string", arguments.key), JavaCast("string[]", stringArray)) />
         <cfset returnResource(connection) />
 
         <cfif isDefined("result")>
@@ -1053,7 +1074,6 @@ Thanks!
             <cfreturn 0 />
         </cfif>
     </cffunction>
-
 
     <!--- FIXME: Change to use format Long lpushx(final String key, final String... string) --->
     <!--- LPUSHX - Long lpushx(String key, String string) --->
